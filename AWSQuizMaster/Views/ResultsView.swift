@@ -13,11 +13,11 @@ struct ResultsView: View {
 
             Text(headline)
                 .font(.title2.bold())
-                .foregroundStyle(Color.awsNavy)
+                .foregroundStyle(Color.awsInk)
 
             Text("\(displayedScore)/\(outcome.total)")
                 .font(.system(size: 60, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.awsNavy)
+                .foregroundStyle(Color.awsInk)
                 .contentTransition(.numericText(value: Double(displayedScore)))
                 .accessibilityLabel("Score \(outcome.score) out of \(outcome.total)")
 
@@ -62,7 +62,7 @@ struct ResultsView: View {
             }
         }
         .padding(AWSTheme.spacing)
-        .background(Color.awsLightGray)
+        .background(Color.awsBackground)
         .navigationBarBackButtonHidden(true)
         .task { await animateScore() }
     }
@@ -91,10 +91,10 @@ struct ResultsView: View {
     private func infoChip(icon: String, text: String) -> some View {
         Label(text, systemImage: icon)
             .font(.system(size: 14, weight: .medium))
-            .foregroundStyle(Color.awsNavy)
+            .foregroundStyle(Color.awsInk)
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
-            .background(.white, in: Capsule())
+            .background(Color.awsCard, in: Capsule())
     }
 
     /// Counts the score up from 0 over ~0.8s with a haptic tick per step.

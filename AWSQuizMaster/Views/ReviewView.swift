@@ -29,7 +29,7 @@ struct ReviewView: View {
 
                     Text(current.question.text)
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(Color.awsNavy)
+                        .foregroundStyle(Color.awsInk)
                         .fixedSize(horizontal: false, vertical: true)
 
                     VStack(spacing: 10) {
@@ -44,12 +44,12 @@ struct ReviewView: View {
                             .foregroundStyle(Color.awsOrange)
                         Text(current.question.explanation)
                             .font(.system(size: 15))
-                            .foregroundStyle(Color.awsNavy)
+                            .foregroundStyle(Color.awsInk)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .padding(14)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.white, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
+                    .background(Color.awsCard, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
                 }
                 .padding(.bottom, 20)
             }
@@ -60,7 +60,7 @@ struct ReviewView: View {
             navigationButtons
         }
         .padding(AWSTheme.spacing)
-        .background(Color.awsLightGray)
+        .background(Color.awsBackground)
         .navigationTitle("Review")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -72,7 +72,7 @@ struct ReviewView: View {
         return HStack(spacing: 10) {
             Text(current.question.options[optionIndex])
                 .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(isCorrectAnswer || (isUserPick && !isCorrectAnswer) ? .white : Color.awsNavy)
+                .foregroundStyle(isCorrectAnswer || (isUserPick && !isCorrectAnswer) ? .white : Color.awsInk)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
             if isCorrectAnswer {
@@ -86,7 +86,7 @@ struct ReviewView: View {
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            isCorrectAnswer ? Color.awsGreen : (isUserPick ? Color.awsRed : .white),
+            isCorrectAnswer ? Color.awsGreen : (isUserPick ? Color.awsRed : Color.awsCard),
             in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius)
         )
         .overlay(alignment: .topTrailing) {
@@ -96,7 +96,7 @@ struct ReviewView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.awsNavy, in: Capsule())
+                    .background(Color.awsNavySolid, in: Capsule())
                     .offset(x: -8, y: -8)
             }
         }
@@ -110,10 +110,10 @@ struct ReviewView: View {
             } label: {
                 Label("Previous", systemImage: "chevron.left")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(index > 0 ? Color.awsNavy : .secondary)
+                    .foregroundStyle(index > 0 ? Color.awsInk : .secondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 13)
-                    .background(.white, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
+                    .background(Color.awsCard, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
             }
             .buttonStyle(ScaleButtonStyle())
             .disabled(index == 0)

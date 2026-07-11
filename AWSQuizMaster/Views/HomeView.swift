@@ -21,7 +21,7 @@ struct HomeView: View {
                 }
                 .padding(AWSTheme.spacing)
             }
-            .background(Color.awsLightGray)
+            .background(Color.awsBackground)
             .navigationDestination(for: Route.self) { route in
                 destination(for: route)
             }
@@ -36,7 +36,7 @@ struct HomeView: View {
                 .foregroundStyle(Color.awsOrange)
             Text("AWS Quiz Master")
                 .font(.system(size: 28, weight: .bold))
-                .foregroundStyle(Color.awsNavy)
+                .foregroundStyle(Color.awsInk)
             Text("Cloud Practitioner → Developer Associate")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -82,7 +82,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Recent Quizzes")
                 .font(.headline)
-                .foregroundStyle(Color.awsNavy)
+                .foregroundStyle(Color.awsInk)
 
             if sessions.isEmpty {
                 Text("No quizzes yet — start one above!")
@@ -122,7 +122,7 @@ private struct RecentSessionRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(session.category)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Color.awsNavy)
+                    .foregroundStyle(Color.awsInk)
                 Text("\(session.difficulty) • \(session.date.formatted(date: .abbreviated, time: .shortened))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -133,7 +133,7 @@ private struct RecentSessionRow: View {
                 .foregroundStyle(scoreColor)
         }
         .padding(12)
-        .background(.white, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
+        .background(Color.awsCard, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
     }
 
     private var scoreColor: Color {

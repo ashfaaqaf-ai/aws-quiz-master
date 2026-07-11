@@ -15,7 +15,7 @@ struct StatsCardView: View {
         }
         .padding(.vertical, 20)
         .frame(maxWidth: .infinity)
-        .background(Color.awsNavy, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
+        .background(Color.awsNavySolid, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
     }
 
     private var divider: some View {

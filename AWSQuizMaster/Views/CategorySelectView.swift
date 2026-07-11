@@ -11,17 +11,17 @@ struct CategorySelectView: View {
             VStack(alignment: .leading, spacing: AWSTheme.spacing) {
                 Text("Difficulty")
                     .font(.headline)
-                    .foregroundStyle(Color.awsNavy)
+                    .foregroundStyle(Color.awsInk)
                 difficultyPicker
 
                 Text("Category")
                     .font(.headline)
-                    .foregroundStyle(Color.awsNavy)
+                    .foregroundStyle(Color.awsInk)
                 categoryList
             }
             .padding(AWSTheme.spacing)
         }
-        .background(Color.awsLightGray)
+        .background(Color.awsBackground)
         .navigationTitle("Choose a Topic")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -37,11 +37,11 @@ struct CategorySelectView: View {
                 } label: {
                     Text(difficulty)
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(selectedDifficulty == difficulty ? .white : Color.awsNavy)
+                        .foregroundStyle(selectedDifficulty == difficulty ? .white : Color.awsInk)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
-                            selectedDifficulty == difficulty ? Color.awsOrange : .white,
+                            selectedDifficulty == difficulty ? Color.awsOrange : Color.awsCard,
                             in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius)
                         )
                 }
@@ -64,7 +64,7 @@ struct CategorySelectView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(category)
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(count > 0 ? Color.awsNavy : .secondary)
+                                .foregroundStyle(count > 0 ? Color.awsInk : .secondary)
                             Text("\(count) question\(count == 1 ? "" : "s")")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -75,7 +75,7 @@ struct CategorySelectView: View {
                             .foregroundStyle(Color.awsOrange)
                     }
                     .padding(14)
-                    .background(.white, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
+                    .background(Color.awsCard, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
                 }
                 .buttonStyle(ScaleButtonStyle())
                 .disabled(count == 0)

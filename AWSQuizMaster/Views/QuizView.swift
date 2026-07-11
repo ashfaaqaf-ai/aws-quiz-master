@@ -19,10 +19,10 @@ struct QuizView: View {
                     quizContent(engine: engine)
                 }
             } else {
-                Color.awsLightGray.ignoresSafeArea()
+                Color.awsBackground.ignoresSafeArea()
             }
         }
-        .background(Color.awsLightGray)
+        .background(Color.awsBackground)
         .navigationTitle(config.displayCategory)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -65,7 +65,7 @@ struct QuizView: View {
                     VStack(alignment: .leading, spacing: AWSTheme.spacing) {
                         Text(question.text)
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(Color.awsNavy)
+                            .foregroundStyle(Color.awsInk)
                             .fixedSize(horizontal: false, vertical: true)
 
                         VStack(spacing: 10) {
@@ -109,12 +109,12 @@ struct QuizView: View {
                 .foregroundStyle(Color.awsOrange)
             Text(question.explanation)
                 .font(.system(size: 15))
-                .foregroundStyle(Color.awsNavy)
+                .foregroundStyle(Color.awsInk)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.white, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
+        .background(Color.awsCard, in: RoundedRectangle(cornerRadius: AWSTheme.cornerRadius))
     }
 
     private func nextButton(engine: QuizEngine) -> some View {

@@ -8,7 +8,7 @@ struct QuizProgressBar: View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(.white)
+                    .fill(Color.awsCard)
                 Capsule()
                     .fill(Color.awsOrange)
                     .frame(width: max(8, proxy.size.width * progress))

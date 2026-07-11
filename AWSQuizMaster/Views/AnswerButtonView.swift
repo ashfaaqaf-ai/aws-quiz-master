@@ -64,7 +64,7 @@ struct AnswerButtonView: View {
 
     private var backgroundColor: Color {
         switch state {
-        case .idle, .dimmed: return .white
+        case .idle, .dimmed: return .awsCard
         case .correct: return .awsGreen
         case .wrong: return .awsRed
         }
@@ -72,7 +72,7 @@ struct AnswerButtonView: View {
 
     private var textColor: Color {
         switch state {
-        case .idle, .dimmed: return .awsNavy
+        case .idle, .dimmed: return .awsInk
         case .correct, .wrong: return .white
         }
     }
