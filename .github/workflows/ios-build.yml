@@ -1,0 +1,41 @@
+name: iOS Build
+
+# Builds the app on a cloud Mac so you can develop from Windows.
+# Free for public GitHub repositories.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    # macOS 26 runner ships Xcode 26 (required for the iOS 26 SDK).
+    # If this label is unavailable on your plan, try macos-latest.
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show available Xcode versions
+        run: ls /Applications | grep -i xcode || true
+
+      - name: Build for iOS Simulator
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project AWSQuizMaster.xcodeproj \
+            -scheme AWSQuizMaster \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Zip simulator app (for Appetize.io browser testing)
+        run: |
+          cd build/Build/Products/Debug-iphonesimulator
+          zip -r AWSQuizMaster-simulator.zip AWSQuizMaster.app
+
+      - name: Upload simulator build
+        uses: actions/upload-artifact@v4
+        with:
+          name: AWSQuizMaster-simulator
+          path: build/Build/Products/Debug-iphonesimulator/AWSQuizMaster-simulator.zip
