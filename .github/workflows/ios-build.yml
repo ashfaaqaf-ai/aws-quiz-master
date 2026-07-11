@@ -39,3 +39,27 @@ jobs:
         with:
           name: AWSQuizMaster-simulator
           path: build/Build/Products/Debug-iphonesimulator/AWSQuizMaster-simulator.zip
+
+      - name: Build for iOS device (unsigned)
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project AWSQuizMaster.xcodeproj \
+            -scheme AWSQuizMaster \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build-device \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+
+      - name: Package unsigned IPA (for sideloading with Sideloadly/AltStore)
+        run: |
+          cd build-device/Build/Products/Release-iphoneos
+          mkdir Payload
+          cp -r AWSQuizMaster.app Payload/
+          zip -r AWSQuizMaster-unsigned.ipa Payload
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: AWSQuizMaster-ipa
+          path: build-device/Build/Products/Release-iphoneos/AWSQuizMaster-unsigned.ipa
