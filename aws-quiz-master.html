@@ -2,216 +2,289 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AWS Quiz Master">
-<meta name="theme-color" content="#24303d">
-<title>AWS Quiz Master — App Preview</title>
+<meta name="apple-mobile-web-app-title" content="AWS Quiz">
+<meta name="description" content="Master AWS certifications with 300 free offline questions — Cloud Practitioner to Developer Associate.">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f5f7">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b1017">
+<title>AWS Quiz Master</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
   :root {
-    /* outer showcase page */
-    --page-bg: #f3f0ea; --page-ink: #33302a; --page-sub: #7a746a; --bezel: #1b1b1f;
-    --shadow: 0 24px 60px rgba(36, 48, 61, .25);
-    /* app surfaces (adapt with theme) */
-    --app-bg: #e8ebed; --card: #ffffff; --ink: #24303d; --muted: var(--muted);
-    /* fixed AWS brand colors (same in both themes) */
-    --orange: #ff9900; --navy: #24303d; --green: #29a645; --red: #db3645;
+    --bg: #f4f5f7; --surface: #ffffff; --surface2: #eceef1;
+    --ink: #16212e; --muted: #667381; --line: rgba(22,33,46,.08);
+    --orange: #ff9900; --orange2: #e47911; --navy: #24303d;
+    --green: #23a047; --red: #d9333f;
+    --on-accent: #ffffff;
+    --shadow-card: 0 1px 2px rgba(22,33,46,.05), 0 4px 16px rgba(22,33,46,.06);
+    --shadow-pop: 0 8px 28px rgba(228,121,17,.35);
+    --ease: cubic-bezier(.2,.8,.2,1);
   }
-  /* follow the OS setting only when the user hasn't picked a theme */
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
-      --page-bg: #10141a; --page-ink: #e9edf2; --page-sub: #8b96a3; --bezel: #000;
-      --shadow: 0 24px 60px rgba(0,0,0,.6);
-      --app-bg: #0d1219; --card: #1a2532; --ink: #eef2f7; --muted: #9aa7b5;
+      --bg: #0b1017; --surface: #161f2b; --surface2: #1d2937;
+      --ink: #edf1f6; --muted: #93a1b1; --line: rgba(237,241,246,.07);
+      --green: #2fb457; --red: #e6505b;
+      --shadow-card: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+      --shadow-pop: 0 8px 28px rgba(255,153,0,.22);
     }
   }
-  :root[data-theme="light"] {
-    --page-bg: #f3f0ea; --page-ink: #33302a; --page-sub: #7a746a; --bezel: #1b1b1f;
-    --shadow: 0 24px 60px rgba(36,48,61,.25);
-    --app-bg: #e8ebed; --card: #ffffff; --ink: #24303d; --muted: var(--muted);
-  }
   :root[data-theme="dark"] {
-    --page-bg: #10141a; --page-ink: #e9edf2; --page-sub: #8b96a3; --bezel: #000;
-    --shadow: 0 24px 60px rgba(0,0,0,.6);
-    --app-bg: #0d1219; --card: #1a2532; --ink: #eef2f7; --muted: #9aa7b5;
+    --bg: #0b1017; --surface: #161f2b; --surface2: #1d2937;
+    --ink: #edf1f6; --muted: #93a1b1; --line: rgba(237,241,246,.07);
+    --green: #2fb457; --red: #e6505b;
+    --shadow-card: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+    --shadow-pop: 0 8px 28px rgba(255,153,0,.22);
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f5f7; --surface: #ffffff; --surface2: #eceef1;
+    --ink: #16212e; --muted: #667381; --line: rgba(22,33,46,.08);
+    --green: #23a047; --red: #d9333f;
+    --shadow-card: 0 1px 2px rgba(22,33,46,.05), 0 4px 16px rgba(22,33,46,.06);
+    --shadow-pop: 0 8px 28px rgba(228,121,17,.35);
   }
 
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { height: 100%; }
   body {
-    margin: 0; background: var(--page-bg); color: var(--page-ink); min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    display: flex; flex-direction: column; align-items: center; padding: 32px 16px 48px;
+    margin: 0; min-height: 100dvh; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none; touch-action: manipulation;
+    user-select: none; -webkit-user-select: none;
   }
-  .lede { text-align: center; max-width: 460px; margin-bottom: 24px; }
-  .lede h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: -.02em; }
-  .lede p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--page-sub); }
-  .lede .chip { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 600; letter-spacing: .04em;
-    padding: 4px 10px; border-radius: 99px; background: var(--orange); color: #fff; }
-
-  .phone {
-    width: 392px; max-width: calc(100vw - 24px); height: 780px; max-height: 84vh;
-    background: var(--bezel); border-radius: 48px; padding: 12px; box-shadow: var(--shadow); flex-shrink: 0;
+  #app {
+    max-width: 560px; margin: 0 auto; min-height: 100dvh;
+    display: flex; flex-direction: column;
+    padding-left: max(env(safe-area-inset-left), 0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
   }
-  .screen {
-    position: relative; width: 100%; height: 100%; background: var(--app-bg);
-    border-radius: 38px; overflow: hidden; display: flex; flex-direction: column;
+
+  /* ---------- header ---------- */
+  .hdr {
+    position: sticky; top: 0; z-index: 40;
+    display: flex; align-items: center; gap: 8px;
+    padding: calc(env(safe-area-inset-top) + 10px) 16px 10px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
   }
-  .notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-    width: 110px; height: 26px; background: var(--bezel); border-radius: 14px; z-index: 50; }
+  @supports not (background: color-mix(in srgb, red 50%, blue)) {
+    .hdr { background: var(--bg); }
+  }
+  .hdr .ttl { flex: 1; text-align: center; font-size: 17px; font-weight: 700; letter-spacing: -.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hdr .side { width: 74px; display: flex; align-items: center; }
+  .hdr .side.r { justify-content: flex-end; gap: 6px; }
+  .hbtn { border: 0; background: none; color: var(--orange); font-size: 15px; font-weight: 600;
+    padding: 8px 4px; cursor: pointer; display: flex; align-items: center; gap: 2px;
+    transition: transform .12s var(--ease), opacity .12s; }
+  .hbtn:active { transform: scale(.92); opacity: .7; }
+  .icbtn { border: 0; background: var(--surface); color: var(--ink); width: 36px; height: 36px;
+    border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; box-shadow: var(--shadow-card);
+    transition: transform .12s var(--ease); }
+  .icbtn:active { transform: scale(.88); }
 
-  .nav { flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative;
-    padding: 48px 16px 8px; min-height: 84px; }
-  .nav .title { font-size: 16px; font-weight: 600; color: var(--ink); }
-  .nav .back { position: absolute; left: 14px; bottom: 8px; border: 0; background: none; color: var(--orange);
-    font-size: 15px; font-weight: 500; cursor: pointer; padding: 6px; }
-  .content { flex: 1; overflow-y: auto; padding: 8px 16px 24px; -webkit-overflow-scrolling: touch; }
-  .content::-webkit-scrollbar { display: none; }
+  /* ---------- content & screens ---------- */
+  .content { flex: 1; padding: 8px 16px calc(env(safe-area-inset-bottom) + 24px); }
+  .enter { animation: enter .28s var(--ease) both; }
+  @keyframes enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (min-width: 720px) { #app { max-width: 640px; } }
 
-  button { font-family: inherit; }
-  .btn-primary {
+  /* ---------- hero (home) ---------- */
+  .hero {
+    border-radius: 22px; padding: 20px;
+    background: linear-gradient(135deg, #ff9900 0%, #f08804 55%, #e47911 100%);
+    color: #fff; box-shadow: var(--shadow-pop);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .hero .row1 { display: flex; align-items: center; gap: 12px; }
+  .hero .cloud { font-size: 40px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,.18)); }
+  .hero h1 { margin: 0; font-size: clamp(20px, 5.6vw, 24px); font-weight: 800; letter-spacing: -.02em; }
+  .hero .sub { margin: 2px 0 0; font-size: 12.5px; opacity: .92; font-weight: 500; }
+  .hero .lvl { margin-left: auto; text-align: right; }
+  .hero .lvl .badge { display: inline-block; background: rgba(255,255,255,.22); border-radius: 99px;
+    padding: 4px 10px; font-size: 11.5px; font-weight: 700; letter-spacing: .02em; }
+  .hero .lvl .xp { display: block; font-size: 10.5px; opacity: .85; margin-top: 4px; }
+  .hero .trio { display: flex; background: rgba(0,0,0,.14); border-radius: 16px; padding: 12px 0; }
+  .hero .trio .c { flex: 1; text-align: center; }
+  .hero .trio .c + .c { border-left: 1px solid rgba(255,255,255,.22); }
+  .hero .trio .v { font-size: clamp(19px, 5vw, 22px); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .hero .trio .k { font-size: 10.5px; opacity: .88; margin-top: 2px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+
+  /* ---------- buttons ---------- */
+  .btn {
     display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
-    padding: 15px; border: 0; border-radius: 12px; background: var(--orange); color: #fff;
-    font-size: 17px; font-weight: 600; cursor: pointer; transition: transform .15s ease;
+    padding: 16px; border: 0; border-radius: 16px; font-size: 16.5px; font-weight: 700;
+    letter-spacing: -.01em; cursor: pointer; color: var(--on-accent);
+    background: linear-gradient(180deg, #ff9900, #ef8a06);
+    box-shadow: 0 2px 10px rgba(228,121,17,.28);
+    transition: transform .13s var(--ease), box-shadow .13s;
   }
-  .btn-primary:active { transform: scale(.95); }
-  .card { background: var(--card); border-radius: 12px; padding: 14px; }
-
-  /* Home */
-  .home-head { text-align: center; padding: 4px 0 12px; }
-  .home-head .cloud { font-size: 44px; line-height: 1; color: var(--orange); }
-  .home-head h2 { margin: 6px 0 2px; font-size: 26px; font-weight: 700; color: var(--ink); }
-  .home-head p { margin: 0; font-size: 13px; color: var(--muted); }
-  .stats { display: flex; background: var(--navy); border-radius: 12px; padding: 20px 0; margin-bottom: 16px; }
-  .stats .col { flex: 1; text-align: center; }
-  .stats .col + .col { border-left: 1px solid rgba(255,255,255,.2); }
-  .stats .num { font-size: 24px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
-  .stats .num .flame { color: var(--orange); font-size: 17px; }
-  .stats .lbl { font-size: 11px; color: rgba(255,255,255,.7); margin-top: 3px; }
+  .btn:active { transform: scale(.965); box-shadow: 0 1px 4px rgba(228,121,17,.3); }
+  .btn.ghost { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-card); }
+  .btn.subtle { background: var(--surface2); color: var(--ink); box-shadow: none; }
   .stack { display: flex; flex-direction: column; gap: 12px; }
-  .hint { text-align: center; font-size: 12px; color: var(--muted); }
-  .recent h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin: 18px 0 8px; }
-  .recent .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .recent .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .recent .name { font-size: 14px; font-weight: 600; color: var(--ink); }
-  .recent .score { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .empty-note { text-align: center; color: var(--muted); font-size: 13px; padding: 22px 0; }
 
-  /* Category select */
-  .seg { display: flex; gap: 8px; margin-bottom: 16px; }
-  .seg button { flex: 1; padding: 10px 4px; border: 0; border-radius: 12px; background: var(--card);
-    color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer; transition: transform .15s, background .2s, color .2s; }
-  .seg button:active { transform: scale(.95); }
-  .seg button.on { background: var(--orange); color: #fff; }
-  .sect { font-size: 15px; font-weight: 600; color: var(--ink); margin: 4px 0 8px; }
-  .cat { display: flex; align-items: center; justify-content: space-between; width: 100%; text-align: left;
-    border: 0; cursor: pointer; margin-bottom: 10px; transition: transform .15s; }
+  /* ---------- cards & lists ---------- */
+  .card { background: var(--surface); border-radius: 18px; padding: 16px; box-shadow: var(--shadow-card); }
+  .sect { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .04em;
+    text-transform: uppercase; margin: 22px 4px 10px; }
+  .rowitem { display: flex; align-items: center; gap: 12px; }
+  .rowitem .grow { flex: 1; min-width: 0; }
+  .rowitem .t { font-size: 15.5px; font-weight: 650; }
+  .rowitem .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .score-pill { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  /* category grid */
+  .catgrid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 480px) { .catgrid { grid-template-columns: 1fr 1fr; } }
+  .cat {
+    display: flex; align-items: center; gap: 12px; text-align: left; width: 100%;
+    border: 0; cursor: pointer; background: var(--surface); border-radius: 18px;
+    padding: 14px; box-shadow: var(--shadow-card);
+    transition: transform .13s var(--ease);
+  }
   .cat:active { transform: scale(.97); }
-  .cat[disabled] { opacity: .5; cursor: default; }
-  .cat .name { font-size: 15px; font-weight: 600; color: var(--ink); }
-  .cat .count { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .cat .chev { color: var(--orange); font-weight: 700; }
+  .cat[disabled] { opacity: .45; cursor: default; }
+  .cat .emo { font-size: 24px; width: 44px; height: 44px; border-radius: 13px; background: var(--surface2);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .cat .nm { font-size: 14.5px; font-weight: 700; }
+  .cat .ct { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .cat .mast { height: 4px; border-radius: 99px; background: var(--surface2); margin-top: 7px; overflow: hidden; }
+  .cat .mast i { display: block; height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #ff9900, #e47911); }
 
-  /* Quiz */
-  .track { height: 8px; background: var(--card); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
-  .fill { height: 100%; width: 0; background: var(--orange); border-radius: 99px; transition: width .3s ease; }
-  .qmeta { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
-  .qtext { font-size: 18px; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 16px; }
-  .fadeq { animation: fadein .25s ease; }
-  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  /* segmented difficulty */
+  .seg { display: flex; gap: 8px; }
+  .seg button {
+    flex: 1; padding: 12px 4px; border: 0; border-radius: 14px; background: var(--surface);
+    color: var(--ink); font-size: 13.5px; font-weight: 700; cursor: pointer;
+    box-shadow: var(--shadow-card); transition: transform .13s var(--ease), background .18s, color .18s;
+  }
+  .seg button:active { transform: scale(.94); }
+  .seg button.on { background: linear-gradient(180deg, #ff9900, #ef8a06); color: #fff; }
+
+  /* ---------- quiz ---------- */
+  .track { height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; margin: 4px 0 10px; }
+  .fill { height: 100%; width: 0; border-radius: 99px;
+    background: linear-gradient(90deg, #ff9900, #e47911); transition: width .35s var(--ease); }
+  .qmeta { display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 14px; }
+  .qmeta .dchip { background: var(--surface2); padding: 3px 10px; border-radius: 99px; font-size: 10.5px;
+    font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+  .qtext { font-size: clamp(17px, 4.9vw, 20px); font-weight: 750; line-height: 1.36;
+    letter-spacing: -.015em; margin-bottom: 18px; }
   .answers { display: flex; flex-direction: column; gap: 10px; }
-  .ans { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
-    text-align: left; padding: 14px; border: 0; border-radius: 12px; background: var(--card);
-    color: var(--ink); font-size: 15px; font-weight: 500; cursor: pointer;
-    transition: transform .15s, background .3s, color .3s, opacity .3s; }
-  .ans:active { transform: scale(.95); }
-  .ans .mark { flex-shrink: 0; font-size: 18px; font-weight: 700; opacity: 0; transform: scale(.4); transition: all .3s ease; }
-  .ans.correct { background: var(--green); color: #fff; }
+  .ans {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
+    text-align: left; padding: 15px 14px; border: 1.5px solid var(--line); border-radius: 16px;
+    background: var(--surface); color: var(--ink); font-size: 15px; font-weight: 550;
+    line-height: 1.35; cursor: pointer;
+    transition: transform .13s var(--ease), background .3s, color .3s, border-color .3s, opacity .3s;
+  }
+  .ans:active { transform: scale(.965); }
+  .ans .mark { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 14px; font-weight: 800;
+    background: rgba(255,255,255,.25); color: #fff;
+    opacity: 0; transform: scale(.3); transition: all .28s var(--ease); }
+  .ans.correct { background: var(--green); border-color: var(--green); color: #fff; }
   .ans.correct .mark, .ans.wrong .mark { opacity: 1; transform: scale(1); }
-  .ans.wrong { background: var(--red); color: #fff; animation: shake .2s ease 0s 3; }
-  .ans.dim { opacity: .55; }
+  .ans.wrong { background: var(--red); border-color: var(--red); color: #fff; animation: shake .38s var(--ease); }
+  .ans.dim { opacity: .5; }
   .ans.locked { cursor: default; }
-  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
-  .explain { margin-top: 14px; opacity: 0; transition: opacity .4s ease; }
-  .explain.show { opacity: 1; }
-  .explain .tag { font-size: 13px; font-weight: 600; color: var(--orange); margin-bottom: 4px; }
-  .explain .body { font-size: 14px; color: var(--ink); line-height: 1.45; }
-  .quiz-foot { flex-shrink: 0; padding: 8px 16px 20px; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-7px); } 40%,80% { transform: translateX(7px); } }
+  .explain { margin-top: 16px; opacity: 0; transform: translateY(8px);
+    transition: opacity .35s var(--ease), transform .35s var(--ease); }
+  .explain.show { opacity: 1; transform: none; }
+  .explain .tag { font-size: 12px; font-weight: 800; color: var(--orange2); letter-spacing: .05em;
+    text-transform: uppercase; margin-bottom: 6px; }
+  .explain .body { font-size: 14.5px; line-height: 1.5; }
+  .footbar {
+    position: sticky; bottom: 0; z-index: 30; margin: 0 -16px; margin-top: 14px;
+    padding: 10px 16px calc(env(safe-area-inset-bottom) + 12px);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  }
+  @supports not (background: color-mix(in srgb, red 50%, blue)) { .footbar { background: var(--bg); } }
 
-  /* Results */
-  .res { text-align: center; padding-top: 26px; }
-  .res .head { font-size: 21px; font-weight: 700; color: var(--ink); }
-  .res .big { font-size: 60px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; margin: 8px 0 2px; }
-  .res .acc { font-size: 19px; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .res .chips { display: flex; justify-content: center; gap: 10px; margin: 16px 0 26px; flex-wrap: wrap; }
-  .res .chip2 { background: var(--card); border-radius: 99px; padding: 8px 14px; font-size: 13px; font-weight: 500; color: var(--ink); }
+  /* ---------- results ---------- */
+  .res { text-align: center; padding-top: 18px; position: relative; }
+  .res .headline { font-size: clamp(20px, 6vw, 24px); font-weight: 800; letter-spacing: -.02em; }
+  .res .big { font-size: clamp(56px, 19vw, 76px); font-weight: 850; letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums; margin: 6px 0 0; line-height: 1.05; }
+  .res .acc { font-size: 18px; font-weight: 750; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .res .chips { display: flex; justify-content: center; gap: 8px; margin: 18px 0 24px; flex-wrap: wrap; }
+  .chip2 { background: var(--surface); border-radius: 99px; padding: 9px 14px; font-size: 13px;
+    font-weight: 600; box-shadow: var(--shadow-card); }
+  #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 90; }
 
-  /* Review */
-  .verdict { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
-  .verdict .diff { margin-left: auto; font-weight: 400; font-size: 11px; color: var(--muted); }
-  .ropt { position: relative; display: flex; justify-content: space-between; gap: 10px; padding: 12px;
-    border-radius: 12px; background: var(--card); color: var(--ink); font-size: 14px; margin-bottom: 10px; }
+  /* ---------- review ---------- */
+  .verdict { display: flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 750; margin-bottom: 10px; }
+  .verdict .diff { margin-left: auto; font-weight: 600; font-size: 10.5px; color: var(--muted);
+    background: var(--surface2); border-radius: 99px; padding: 3px 10px; text-transform: uppercase; letter-spacing: .03em; }
+  .ropt { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 13px 14px; border-radius: 14px; background: var(--surface); font-size: 14px; line-height: 1.35;
+    margin-bottom: 9px; box-shadow: var(--shadow-card); }
   .ropt.good { background: var(--green); color: #fff; }
   .ropt.bad { background: var(--red); color: #fff; }
-  .ropt .you { position: absolute; top: -8px; right: 8px; background: var(--navy); color: #fff;
-    font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 99px; }
-  .rev-nav { display: flex; gap: 12px; }
-  .rev-nav button { flex: 1; padding: 13px; border: 0; border-radius: 12px; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: transform .15s; }
-  .rev-nav button:active { transform: scale(.95); }
-  .rev-nav .prev { background: var(--card); color: var(--ink); }
-  .rev-nav .next { background: var(--orange); color: #fff; }
-  .rev-nav button[disabled] { opacity: .45; cursor: default; }
+  .ropt .you { position: absolute; top: -8px; right: 10px; background: var(--navy); color: #fff;
+    font-size: 8.5px; font-weight: 800; letter-spacing: .06em; padding: 3px 8px; border-radius: 99px; }
+  .rev-nav { display: flex; gap: 10px; }
+  .rev-nav .btn { flex: 1; }
 
-  .unavailable { text-align: center; padding: 60px 20px; }
-  .unavailable .ico { font-size: 42px; color: var(--green); }
-  .unavailable h3 { color: var(--ink); margin: 10px 0 6px; }
-  .unavailable p { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 18px; }
+  /* ---------- stats ---------- */
+  .statbars { display: flex; flex-direction: column; gap: 14px; }
+  .sb .top { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 650; margin-bottom: 6px; }
+  .sb .top .pc { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .sb .bar { height: 8px; border-radius: 99px; background: var(--surface2); overflow: hidden; }
+  .sb .bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+    background: linear-gradient(90deg, #ff9900, #e47911); transition: width .7s var(--ease); }
 
-  .foot-note { margin-top: 22px; max-width: 460px; text-align: center; font-size: 12.5px; line-height: 1.6; color: var(--page-sub); }
-  .foot-note code { background: rgba(127,127,127,.15); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
-  button:focus-visible, .cat:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
-
-  .theme-toggle {
-    position: fixed; top: 16px; right: 16px; z-index: 100;
-    width: 42px; height: 42px; border-radius: 50%;
-    border: 1px solid rgba(127,127,127,.35); background: var(--card); color: var(--ink);
-    font-size: 18px; line-height: 1; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,.18); transition: transform .15s ease;
+  /* ---------- banners / misc ---------- */
+  .banner { display: flex; gap: 10px; align-items: flex-start; background: var(--surface);
+    border-radius: 16px; padding: 13px 14px; box-shadow: var(--shadow-card); font-size: 13px; line-height: 1.45; }
+  .banner .x { margin-left: auto; border: 0; background: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 0 2px; }
+  .hint { text-align: center; font-size: 12.5px; color: var(--muted); }
+  .empty { text-align: center; padding: 48px 20px; }
+  .empty .ico { font-size: 44px; }
+  .empty h3 { margin: 12px 0 6px; font-size: 18px; }
+  .empty p { font-size: 13.5px; color: var(--muted); line-height: 1.5; margin: 0 0 20px; }
+  button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
   }
-  .theme-toggle:active { transform: scale(.88); }
-
-  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
-
-
-<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark or light theme">&#127769;</button>
-
-<div class="lede">
-  <h1>AWS Quiz Master</h1>
-  <p>A working browser preview of the SwiftUI iOS app — same 300-question bank, quiz logic, practice mode, and stats. Your progress persists in this browser.</p>
-  <span class="chip">iOS 26 app &middot; interactive preview</span>
-</div>
-
-<div class="phone"><div class="screen"><div class="notch"></div><div id="app" style="display:flex;flex-direction:column;flex:1;min-height:0"></div></div></div>
-
-<p class="foot-note">This mirrors <code>AWSQuizMaster.xcodeproj</code>. The native app adds haptics, SwiftData persistence, and Liquid Glass system chrome. Build it without a Mac via the included GitHub Actions workflow.</p>
+<div id="app"></div>
+<canvas id="confetti" width="0" height="0"></canvas>
 
 <script>
+"use strict";
 const BANK = {"categories":["Compute","Storage","Database","Networking","Security & Identity","Management & Monitoring","Analytics","Integration","Developer Tools","Other"],"questions":[{"id":"q1","text":"Which AWS service provides virtual compute capacity?","options":["Lambda","EC2","Fargate","S3"],"correctAnswer":1,"explanation":"Amazon EC2 provides resizable compute capacity in the cloud. S3 is object storage, Lambda is serverless compute, Fargate is container orchestration.","category":"Compute","difficulty":"Beginner"},{"id":"q2","text":"What is the primary benefit of using AWS Lambda?","options":["Cheaper than EC2","No server management required","More secure","Better performance"],"correctAnswer":1,"explanation":"Lambda is serverless compute - you don't manage servers, instances, or capacity. AWS handles all infrastructure. You pay only for execution time.","category":"Compute","difficulty":"Beginner"},{"id":"q3","text":"Which service stores objects in AWS?","options":["RDS","S3","EFS","EBS"],"correctAnswer":1,"explanation":"Amazon S3 is the primary object storage service. RDS stores relational data, EBS is block storage, EFS is file storage.","category":"Storage","difficulty":"Beginner"},{"id":"q4","text":"What does EBS stand for?","options":["Enterprise Block Service","Elastic Block Storage","Elastic Basic Storage","Elastic Batch Service"],"correctAnswer":1,"explanation":"EBS stands for Elastic Block Storage. It provides block-level storage volumes for EC2 instances, similar to physical hard drives.","category":"Storage","difficulty":"Beginner"},{"id":"q5","text":"Which AWS database service is fully managed and serverless?","options":["DynamoDB","RDS","Redshift","EC2 with MySQL"],"correctAnswer":0,"explanation":"DynamoDB is a fully managed, serverless NoSQL database. RDS requires instance management, EC2 requires manual database setup, Redshift is data warehouse.","category":"Database","difficulty":"Beginner"},{"id":"q6","text":"What is the primary use case for Amazon RDS?","options":["Data warehousing","Relational database management","NoSQL data storage","Object storage"],"correctAnswer":1,"explanation":"RDS is for relational databases (MySQL, PostgreSQL, Oracle, SQL Server). It's fully managed but requires instance provisioning.","category":"Database","difficulty":"Beginner"},{"id":"q7","text":"Which service routes traffic based on DNS?","options":["ELB","Route 53","VPC","CloudFront"],"correctAnswer":1,"explanation":"Route 53 is AWS's managed DNS service. CloudFront is CDN, ELB is load balancer, VPC is network isolation.","category":"Networking","difficulty":"Beginner"},{"id":"q8","text":"What does a VPC provide?","options":["Virtual compute","Virtual private cache","Virtual processing cluster","Virtual private cloud network"],"correctAnswer":3,"explanation":"VPC (Virtual Private Cloud) is isolated network infrastructure where you launch AWS resources. It gives you control over IP ranges, subnets, route tables, and gateways.","category":"Networking","difficulty":"Beginner"},{"id":"q9","text":"Which IAM component grants permissions to resources?","options":["Role","User","Policy","Group"],"correctAnswer":2,"explanation":"Policies are JSON documents that define permissions. Users, Roles, and Groups are identities. Policies are attached to these identities to grant permissions.","category":"Security & Identity","difficulty":"Beginner"},{"id":"q10","text":"What is the principle of least privilege in AWS?","options":["Give minimum necessary permissions","Only admins have permissions","No permissions needed","Give all permissions by default"],"correctAnswer":0,"explanation":"Least privilege means granting only the minimum permissions needed for a user/role to perform their function. This is a security best practice.","category":"Security & Identity","difficulty":"Beginner"},{"id":"q11","text":"Which service monitors AWS resource metrics?","options":["Trusted Advisor","Config","CloudWatch","CloudTrail"],"correctAnswer":2,"explanation":"CloudWatch collects metrics and logs from AWS resources. CloudTrail logs API calls, Config tracks configuration changes, Trusted Advisor provides best practice recommendations.","category":"Management & Monitoring","difficulty":"Beginner"},{"id":"q12","text":"What does CloudTrail record?","options":["Resource metrics","Network traffic","Configuration changes","API calls and account activity"],"correctAnswer":3,"explanation":"CloudTrail logs all API calls made in your AWS account, including who made the call, when, and from where. This is essential for auditing and compliance.","category":"Management & Monitoring","difficulty":"Beginner"},{"id":"q13","text":"Which AWS free tier offering has time limits?","options":["Always free","Depends on service","No free tier","1 year free"],"correctAnswer":1,"explanation":"AWS free tier has three categories: Always free (no time limit), 12 months free (time-limited), and free trial offers. Different services fall into different categories.","category":"Other","difficulty":"Beginner"},{"id":"q14","text":"What is AWS Regions?","options":["Availability zones grouped by geography","Data centers within a city","A single server location","Multiple data centers in different geographic locations"],"correctAnswer":3,"explanation":"AWS Regions are geographically dispersed locations with multiple data centers. Each region contains multiple Availability Zones for redundancy.","category":"Other","difficulty":"Beginner"},{"id":"q15","text":"What is an Availability Zone (AZ)?","options":["A region","A data center within a region","A single server","A country"],"correctAnswer":1,"explanation":"An Availability Zone is a data center within a region with independent power, cooling, and networking. Regions typically have 3+ AZs for high availability.","category":"Other","difficulty":"Beginner"},{"id":"q16","text":"Which EC2 instance type is best for general purpose workloads?","options":["c5/c6","t2/t3","i3/i4","r5/r6"],"correctAnswer":1,"explanation":"t2/t3 instances are burstable general purpose. c5/c6 are compute optimized, r5/r6 are memory optimized, i3/i4 are storage optimized.","category":"Compute","difficulty":"Intermediate"},{"id":"q17","text":"What is an EC2 AMI?","options":["A virtual machine snapshot","A security group","A subnet configuration","An instance type"],"correctAnswer":0,"explanation":"AMI (Amazon Machine Image) is a pre-configured template containing OS, software, and configuration. It's used to launch EC2 instances.","category":"Compute","difficulty":"Intermediate"},{"id":"q18","text":"What does Auto Scaling do?","options":["Increases server speed","Optimizes database queries","Reduces network latency","Automatically adjusts capacity based on demand"],"correctAnswer":3,"explanation":"Auto Scaling automatically launches or terminates EC2 instances based on demand, load, or schedule. This ensures optimal performance and cost efficiency.","category":"Compute","difficulty":"Intermediate"},{"id":"q19","text":"What is AWS Elastic Beanstalk?","options":["A platform for deploying web applications","A container orchestration service","A load balancer","A database service"],"correctAnswer":0,"explanation":"Elastic Beanstalk is a Platform as a Service (PaaS) for deploying web applications. It handles capacity provisioning, load balancing, and auto scaling.","category":"Compute","difficulty":"Intermediate"},{"id":"q20","text":"What is AWS Fargate?","options":["A virtual machine service","A database service","A serverless container orchestration service","A load balancer"],"correctAnswer":2,"explanation":"Fargate is serverless container orchestration for ECS. You run containers without managing EC2 instances. AWS manages infrastructure.","category":"Compute","difficulty":"Intermediate"},{"id":"q21","text":"What are the S3 storage classes?","options":["Hot, Warm, Cold, Frozen","Free, Basic, Pro, Enterprise","Standard, Intelligent-Tiering, Glacier, Deep Archive","Standard, Premium, Enterprise, Archive"],"correctAnswer":2,"explanation":"S3 storage classes include Standard (frequent access), Intelligent-Tiering (automatic), Glacier (archive), Deep Archive (long-term), and others for different use cases.","category":"Storage","difficulty":"Intermediate"},{"id":"q22","text":"What is S3 versioning?","options":["Keeping multiple versions of objects in S3","Creating new S3 buckets","Updating S3 API","Creating backups"],"correctAnswer":0,"explanation":"Versioning allows you to store multiple versions of the same object in S3. You can restore previous versions if needed, providing data protection.","category":"Storage","difficulty":"Intermediate"},{"id":"q23","text":"What does S3 lifecycle policy do?","options":["Encrypts data","Deletes old buckets","Backs up data","Automatically transitions objects to cheaper storage or deletes them"],"correctAnswer":3,"explanation":"Lifecycle policies automatically transition objects between storage classes (e.g., Standard → Glacier after 90 days) or delete them based on rules.","category":"Storage","difficulty":"Intermediate"},{"id":"q24","text":"What is EFS (Elastic File System)?","options":["Object storage","Block storage","Database storage","Shared file storage for multiple EC2 instances"],"correctAnswer":3,"explanation":"EFS is a managed NFS file system accessible from multiple EC2 instances. Unlike EBS, EFS can be shared across multiple instances.","category":"Storage","difficulty":"Intermediate"},{"id":"q25","text":"What is the difference between RDS and DynamoDB?","options":["RDS is NoSQL, DynamoDB is SQL","They are identical","RDS is relational, DynamoDB is NoSQL","RDS is serverless, DynamoDB is managed"],"correctAnswer":2,"explanation":"RDS is for relational databases (structured data with schema), DynamoDB is NoSQL key-value/document store (flexible schema). Both are fully managed.","category":"Database","difficulty":"Intermediate"},{"id":"q26","text":"What is database Multi-AZ deployment in RDS?","options":["Multiple regions","Synchronous replication across AZs","Multiple backups","Multiple databases"],"correctAnswer":1,"explanation":"Multi-AZ creates a synchronous standby replica in another AZ. If primary fails, automatic failover occurs. Provides high availability.","category":"Database","difficulty":"Intermediate"},{"id":"q27","text":"What is Amazon Redshift?","options":["A search service","A NoSQL database","A relational database","A data warehouse for analytics"],"correctAnswer":3,"explanation":"Redshift is a data warehouse service for running complex analytical queries on large datasets. Optimized for OLAP, not OLTP.","category":"Database","difficulty":"Intermediate"},{"id":"q28","text":"What is elasticity in AWS?","options":["The ability to stretch resources","The ability to move resources","The ability to automatically scale resources up/down based on demand","The ability to backup data"],"correctAnswer":2,"explanation":"Elasticity is the ability to automatically scale computing resources up when demand increases and down when it decreases, without manual intervention.","category":"Other","difficulty":"Intermediate"},{"id":"q29","text":"What is a Load Balancer used for?","options":["Monitoring resources","Distributing traffic across multiple instances","Encrypting data","Storing data"],"correctAnswer":1,"explanation":"Load Balancers (ELB, ALB, NLB) distribute incoming traffic across multiple targets (EC2 instances, containers, etc.) for high availability and scalability.","category":"Networking","difficulty":"Intermediate"},{"id":"q30","text":"What are the types of AWS Load Balancers?","options":["Regional Load Balancer","Application Load Balancer (ALB) only","Network Load Balancer only","ALB, Network Load Balancer (NLB), Classic Load Balancer (CLB)"],"correctAnswer":3,"explanation":"AWS offers ALB (Layer 7, best for web/HTTP), NLB (Layer 4, extreme performance), and CLB (legacy). ALB and NLB are recommended for new applications.","category":"Networking","difficulty":"Intermediate"},{"id":"q31","text":"What is a Security Group?","options":["A set of security policies","A compliance framework","A team of security professionals","A firewall controlling inbound/outbound traffic for resources"],"correctAnswer":3,"explanation":"Security Groups are virtual firewalls that control inbound and outbound traffic for EC2 instances and other resources. They operate at network level.","category":"Networking","difficulty":"Intermediate"},{"id":"q32","text":"What is a Network ACL (NACL)?","options":["A subnet-level firewall","An IAM policy","A security group","A VPC setting"],"correctAnswer":0,"explanation":"NACLs are stateless firewalls at the subnet level. Unlike Security Groups (stateful), NACLs require explicit allow/deny rules for both directions.","category":"Networking","difficulty":"Intermediate"},{"id":"q33","text":"What is CloudFront?","options":["A Content Delivery Network (CDN)","A compute service","A storage service","A database service"],"correctAnswer":0,"explanation":"CloudFront is AWS's CDN service that caches content at edge locations closer to users, reducing latency and improving performance.","category":"Networking","difficulty":"Intermediate"},{"id":"q34","text":"What is an IAM Role?","options":["A user account","An identity with permissions that AWS services or entities can assume","A group of users","A security policy"],"correctAnswer":1,"explanation":"IAM Roles are identities with permissions that can be assumed by users, applications, or AWS services. Useful for temporary access without storing credentials.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q35","text":"What is AWS KMS (Key Management Service)?","options":["A key management service for encryption","A certificate service","A password manager","A security monitoring service"],"correctAnswer":0,"explanation":"KMS is a managed service for creating and controlling encryption keys. It integrates with other AWS services to provide encryption at rest.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q36","text":"What is AWS Secrets Manager?","options":["A managed service for storing and retrieving secrets (passwords, API keys, etc.)","An encryption service","A password storage service","A security audit tool"],"correctAnswer":0,"explanation":"Secrets Manager stores secrets like passwords, database credentials, and API keys. It provides automatic rotation and integrates with applications.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q37","text":"What is AWS WAF (Web Application Firewall)?","options":["A network firewall","Protection against web exploits (SQL injection, XSS, etc.)","A SSL certificate service","A DDoS protection service"],"correctAnswer":1,"explanation":"WAF protects web applications from common web exploits. It inspects traffic and blocks malicious requests. Can be attached to ALB, CloudFront, API Gateway.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q38","text":"What is AWS Shield?","options":["Intrusion detection","Data loss prevention","Encryption service","DDoS protection"],"correctAnswer":3,"explanation":"Shield provides DDoS protection. Shield Standard is free for all customers, Shield Advanced offers enhanced protection against larger attacks.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q39","text":"What is AWS Config?","options":["Configuration management service","Monitoring tool","Configuration tracking and compliance","Deployment tool"],"correctAnswer":2,"explanation":"Config continuously monitors and records AWS resource configurations. It can enforce compliance rules and alert when configuration drifts occur.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q40","text":"What is CloudFormation?","options":["A form template service","A form builder","A document management service","Infrastructure as Code tool for provisioning AWS resources"],"correctAnswer":3,"explanation":"CloudFormation allows you to define infrastructure as code using JSON/YAML templates. Creates, updates, and deletes AWS resources in an organized manner.","category":"Other","difficulty":"Intermediate"},{"id":"q41","text":"What is SNS (Simple Notification Service)?","options":["A compute service","A pub/sub notification service","A messaging service","A storage service"],"correctAnswer":1,"explanation":"SNS is a pub/sub service for sending messages. Publishers send to topics, subscribers receive notifications via email, SMS, HTTP, Lambda, etc.","category":"Integration","difficulty":"Intermediate"},{"id":"q42","text":"What is SQS (Simple Queue Service)?","options":["A message queue service for decoupling applications","A database service","A notification service","A storage service"],"correctAnswer":0,"explanation":"SQS is a fully managed message queue. Applications can send messages to a queue and consumers process them. Decouples components for scalability.","category":"Integration","difficulty":"Intermediate"},{"id":"q43","text":"What is EventBridge?","options":["A bridge between networks","A data warehouse","A security service","A serverless event bus for routing events between applications"],"correctAnswer":3,"explanation":"EventBridge (formerly CloudWatch Events) is a serverless event bus. It routes events from sources to targets, enabling event-driven architectures.","category":"Integration","difficulty":"Intermediate"},{"id":"q44","text":"What is AWS Step Functions?","options":["A monitoring service","A deployment service","An orchestration service for coordinating workflows","A staircase tool"],"correctAnswer":2,"explanation":"Step Functions is a workflow orchestration service. Define state machines to coordinate multiple AWS services and build complex applications.","category":"Integration","difficulty":"Intermediate"},{"id":"q45","text":"What is Amazon Kinesis?","options":["A file storage service","A real-time data streaming service","A messaging service","A database service"],"correctAnswer":1,"explanation":"Kinesis is a platform for real-time data streaming. Capture, process, and store data streams. Used for analytics, monitoring, and real-time applications.","category":"Analytics","difficulty":"Intermediate"},{"id":"q46","text":"What is Amazon Athena?","options":["A database service","A data warehouse","A Greek goddess","Query service for analyzing data in S3 using SQL"],"correctAnswer":3,"explanation":"Athena allows you to query data in S3 using SQL. Serverless, pay-per-query pricing. No need to load data into a database.","category":"Analytics","difficulty":"Intermediate"},{"id":"q47","text":"What is AWS Glue?","options":["A monitoring tool","A database service","A storage service","ETL service for preparing and loading data"],"correctAnswer":3,"explanation":"Glue is a managed ETL service. Discover, prepare, and load data from various sources. Automatically generates code for data transformation.","category":"Analytics","difficulty":"Intermediate"},{"id":"q48","text":"What is AWS CodePipeline?","options":["A data pipeline tool","A CI/CD orchestration service","A deployment tool","A monitoring service"],"correctAnswer":1,"explanation":"CodePipeline is a CI/CD service that automates software release process. Integrates with CodeBuild, CodeDeploy, and other services for continuous delivery.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q49","text":"What is AWS CodeBuild?","options":["A deployment tool","A versioning system","A managed build service for compiling source code","A code editor"],"correctAnswer":2,"explanation":"CodeBuild is a managed build service. Compiles source code, runs tests, produces deployable artifacts. Scales automatically.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q50","text":"What is AWS CodeDeploy?","options":["A testing tool","A deployment planning tool","A service for automating application deployment","A monitoring service"],"correctAnswer":2,"explanation":"CodeDeploy automates deployment of applications to various compute services (EC2, on-premises, Lambda). Supports blue/green and canary deployments.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q51","text":"What is the difference between Reserved Instances and On-Demand Instances?","options":["Reserved = pre-paid for 1-3 years with discount, On-Demand = pay per hour","Reserved = limited capacity","Reserved = free, On-Demand = paid","No difference"],"correctAnswer":0,"explanation":"Reserved Instances require upfront payment but offer significant discounts (up to 72% off). On-Demand have higher hourly rates but no commitment.","category":"Other","difficulty":"Intermediate"},{"id":"q52","text":"What is Spot Instances?","options":["Temporary instances","High-performance instances","Discounted instances available when capacity is unused (up to 90% off)","Premium instances"],"correctAnswer":2,"explanation":"Spot Instances are unused capacity sold at significant discounts. Can be interrupted with 2-minute notice. Best for fault-tolerant workloads.","category":"Other","difficulty":"Intermediate"},{"id":"q53","text":"What is AWS Trusted Advisor?","options":["A compliance tool","A security consultant","A service providing real-time recommendations for AWS account optimization","A monitoring service"],"correctAnswer":2,"explanation":"Trusted Advisor checks your AWS account against best practices. Provides recommendations on cost optimization, security, performance, and reliability.","category":"Other","difficulty":"Intermediate"},{"id":"q54","text":"What is AWS Support Plans?","options":["Basic, Standard, Premium, Enterprise","Free, Standard, Professional, Enterprise","Free, Basic, Standard, Enterprise","Only free support"],"correctAnswer":2,"explanation":"AWS offers Free, Basic, Standard (Business Hours), Business (24/7), and Enterprise (24/7 with TAM) support plans with increasing SLA and response times.","category":"Other","difficulty":"Intermediate"},{"id":"q55","text":"What is AWS Organizations?","options":["A team management tool","An employee directory","A service for centrally managing multiple AWS accounts","A project management tool"],"correctAnswer":2,"explanation":"Organizations allows you to centrally manage multiple AWS accounts under one master account. Enables consolidated billing and consistent policies.","category":"Other","difficulty":"Intermediate"},{"id":"q56","text":"In multi-tier architecture, what order should resources be deployed?","options":["Web tier, database tier, application tier","Web tier, application tier, database tier","Database tier, application tier, web tier","No specific order"],"correctAnswer":2,"explanation":"Best practice: deploy database first (dependencies), then application tier, then web tier. Ensures lower layers are ready when upper layers connect.","category":"Other","difficulty":"Advanced"},{"id":"q57","text":"What is high availability vs disaster recovery?","options":["No difference","They are the same","HA = minimize downtime, DR = recover from major failures","HA = prevent failures, DR = plan for failures"],"correctAnswer":2,"explanation":"HA focuses on minimizing downtime through redundancy (Multi-AZ, Load Balancers). DR focuses on recovering from catastrophic failures (backups, alternative regions).","category":"Other","difficulty":"Advanced"},{"id":"q58","text":"What is RPO (Recovery Point Objective)?","options":["Failover time","Time to restore systems","Backup frequency requirement","Maximum amount of data loss acceptable"],"correctAnswer":3,"explanation":"RPO is the maximum acceptable data loss. If RPO = 1 hour, backups must occur at least hourly. RTO is maximum acceptable downtime.","category":"Other","difficulty":"Advanced"},{"id":"q59","text":"What is a Web Application Firewall (WAF) rule example?","options":["Allow only HTTPS","Block requests with SQL injection patterns","Allow only from specific countries","Block all traffic"],"correctAnswer":1,"explanation":"WAF rules detect and block common attacks like SQL injection, XSS, etc. Rules inspect request content and block malicious patterns.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q60","text":"What is encryption at rest?","options":["Encrypting data stored on disk/database","Temporarily storing encrypted data","Encrypting data in memory","Encrypting data during transmission"],"correctAnswer":0,"explanation":"Encryption at rest protects data stored in databases, EBS, S3, etc. Uses keys managed by KMS. Complements encryption in transit.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q61","text":"What is encryption in transit?","options":["Encrypting backups","Encrypting logs","Encrypting data during transmission between systems","Encrypting data stored"],"correctAnswer":2,"explanation":"Encryption in transit protects data moving between systems using TLS/SSL. Ensures data isn't intercepted or modified during transmission.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q62","text":"What is a virtual private gateway (VGW)?","options":["An internet gateway","A VPN endpoint on AWS side for connecting VPC to on-premises","A public gateway","A NAT gateway"],"correctAnswer":1,"explanation":"VGW is attached to a VPC and serves as the VPN endpoint. Customer gateway (on-premises) connects to VGW, establishing IPsec tunnel.","category":"Networking","difficulty":"Advanced"},{"id":"q63","text":"What is AWS Direct Connect?","options":["VPN service","Dedicated network connection to AWS","Fast internet connection","Load balancer"],"correctAnswer":1,"explanation":"Direct Connect provides dedicated network connections from on-premises to AWS. Lower latency, more consistent performance than internet-based VPN.","category":"Networking","difficulty":"Advanced"},{"id":"q64","text":"What is VPC peering?","options":["Load balancing","Connecting to internet","Connecting two VPCs privately","DNS routing"],"correctAnswer":2,"explanation":"VPC peering connects two VPCs using private IP addresses. Resources in peered VPCs can communicate as if on same network (intra-region or cross-region).","category":"Networking","difficulty":"Advanced"},{"id":"q65","text":"What is NAT Gateway?","options":["Network access tier","Network address translator","Device that allows private instances to access internet","Network access token"],"correctAnswer":2,"explanation":"NAT Gateway is a managed service allowing private instances to access internet (outbound). Replaces NAT instances. Highly available within AZ.","category":"Networking","difficulty":"Advanced"},{"id":"q66","text":"What is the difference between NAT Gateway and NAT Instance?","options":["Instance = more secure","Gateway = managed, Instance = self-managed","Gateway = free, Instance = paid","No difference"],"correctAnswer":1,"explanation":"NAT Gateway is AWS-managed, highly available, better performance. NAT Instance is user-managed EC2 instance, more flexible but requires more management.","category":"Networking","difficulty":"Advanced"},{"id":"q67","text":"What is a bastion host?","options":["Load balancer","Database server","EC2 instance in public subnet for SSH access to private resources","Security group"],"correctAnswer":2,"explanation":"Bastion host (jump box) is a public-facing EC2 instance. Admins SSH to bastion, then SSH to private instances. Adds security layer.","category":"Networking","difficulty":"Advanced"},{"id":"q68","text":"What is Lambda concurrency?","options":["Number of functions","Function timeout","Number of simultaneous executions allowed","Memory allocation"],"correctAnswer":2,"explanation":"Concurrency limit controls simultaneous Lambda executions. Default 1000. Throttling occurs if limit exceeded. Can be reserved per function.","category":"Compute","difficulty":"Advanced"},{"id":"q69","text":"What is Lambda cold start?","options":["Function timeout","Initial function run","Error condition","First execution taking longer due to initialization"],"correctAnswer":3,"explanation":"Cold start occurs when Lambda invokes function after no recent executions. Function initialization adds latency. Warm starts reuse containers.","category":"Compute","difficulty":"Advanced"},{"id":"q70","text":"What is Lambda layer?","options":["Database layer","UI component","Package of libraries/code that Lambda functions can use","Network layer"],"correctAnswer":2,"explanation":"Layers contain libraries, custom code, or data. Functions can reference layers, reducing deployment package size. Useful for shared dependencies.","category":"Compute","difficulty":"Advanced"},{"id":"q71","text":"What is S3 bucket policy vs ACL?","options":["Policies are deprecated","ACL = better security","Bucket policy = resource-based, ACL = object-level","Same thing"],"correctAnswer":2,"explanation":"Bucket policies (resource-based) control bucket-level access. ACLs control object-level access. Bucket policies are more granular and recommended.","category":"Storage","difficulty":"Advanced"},{"id":"q72","text":"What is S3 Transfer Acceleration?","options":["Parallel transfers","Faster storage","Compression","Uses CloudFront edge locations for faster uploads/downloads"],"correctAnswer":3,"explanation":"Transfer Acceleration uses CloudFront edge locations to optimize uploads/downloads. Beneficial for geographically distributed users.","category":"Storage","difficulty":"Advanced"},{"id":"q73","text":"What is S3 Requester Pays?","options":["Requester pays for requests and data transfer","AWS pays charges","Bucket owner pays charges","Charges are split"],"correctAnswer":0,"explanation":"Requester Pays allows bucket owner to be exempt from costs. Requester pays for requests and data transfer. Used for data sharing.","category":"Storage","difficulty":"Advanced"},{"id":"q74","text":"What is database read replicas in RDS?","options":["Archive copies","Backup copies","Standby for failover","Asynchronous replicas for read scaling"],"correctAnswer":3,"explanation":"Read replicas are asynchronous copies of primary database. Handle read traffic without burdening primary. Can be promoted to standalone.","category":"Database","difficulty":"Advanced"},{"id":"q75","text":"What is DynamoDB eventual consistency?","options":["No consistency","Strong consistency only","Data becomes consistent after some time","Data is immediately consistent"],"correctAnswer":2,"explanation":"Eventual consistency means read might return stale data briefly. DynamoDB offers strongly consistent reads (slower) or eventually consistent (faster, default).","category":"Database","difficulty":"Advanced"},{"id":"q76","text":"What is DynamoDB Global Secondary Index (GSI)?","options":["Alternative partition key for queries","Temporary index","Backup index","Regional index"],"correctAnswer":0,"explanation":"GSI allows querying on attributes other than primary key. Has separate provisioned throughput. Can be added/removed after table creation.","category":"Database","difficulty":"Advanced"},{"id":"q77","text":"What is auto-scaling group (ASG)?","options":["Configuration managing EC2 instance scaling","Security group","Database service","Load balancer"],"correctAnswer":0,"explanation":"ASG automatically scales EC2 instances based on policies (CPU, memory, schedule). Terminates unhealthy instances, maintains desired capacity.","category":"Compute","difficulty":"Advanced"},{"id":"q78","text":"What is AMI hardening?","options":["Pre-configuring AMI with security best practices","Backing up AMI","Encrypting AMI","Making AMI larger"],"correctAnswer":0,"explanation":"Hardening involves pre-configuring AMI with security patches, disabling unnecessary services, and applying best practices. Reduces attack surface.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q79","text":"What is VPC Flow Logs?","options":["Network traffic logs for VPC network interfaces","Application logs","Audit logs","Access logs"],"correctAnswer":0,"explanation":"Flow Logs capture metadata about network traffic (source, destination, protocol, bytes, packets). Helps troubleshoot connectivity and security issues.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q80","text":"What is IAM policy simulator?","options":["Performance simulator","Game simulator","Network simulator","Tool to test IAM policies and permissions"],"correctAnswer":3,"explanation":"Policy simulator allows you to test IAM policies without affecting resources. Verify permissions before applying policies to users/roles.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q81","text":"What is AWS API Gateway?","options":["Network gateway","Database gateway","Service for creating, publishing, managing APIs","Storage gateway"],"correctAnswer":2,"explanation":"API Gateway creates RESTful and WebSocket APIs. Handles authentication, rate limiting, request/response transformation. Integrates with Lambda, EC2, etc.","category":"Integration","difficulty":"Advanced"},{"id":"q82","text":"What is cross-stack references in CloudFormation?","options":["Stack merging","References in database","Stack backups","Exporting values from one stack for use in another"],"correctAnswer":3,"explanation":"Exports allow one stack to output values that other stacks can reference using Fn::ImportValue. Enables loose coupling between stacks.","category":"Other","difficulty":"Advanced"},{"id":"q83","text":"What is canary deployment?","options":["Blue/green deployment","Deploying to all users","Gradual deployment to small user subset first","Rollback deployment"],"correctAnswer":2,"explanation":"Canary deployment releases to small percentage of users first. Monitors for issues before gradually increasing to all users.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q84","text":"What is blue-green deployment?","options":["Canary release","Rolling update","Deploying to different regions","Running two identical production environments, switch traffic between them"],"correctAnswer":3,"explanation":"Blue-green deployment maintains two production environments. Blue (current), Green (new). Test new version, then switch traffic. Instant rollback possible.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q85","text":"What is SageMaker?","options":["Machine learning service for building, training, deploying models","Storage service","Database service","Analytics service"],"correctAnswer":0,"explanation":"SageMaker is a managed ML service. Includes notebooks for development, training jobs, hosting endpoints. Supports various algorithms and frameworks.","category":"Analytics","difficulty":"Advanced"},{"id":"q86","text":"What is AWS AppSync?","options":["Data synchronization","Database replication","File sync service","GraphQL API service for real-time data access"],"correctAnswer":3,"explanation":"AppSync creates GraphQL APIs with real-time capabilities. Connects to multiple data sources (databases, Lambda, RDS, etc.). Handles subscriptions.","category":"Integration","difficulty":"Advanced"},{"id":"q87","text":"What is Amazon ElastiCache?","options":["Database cache","File cache","Storage cache","In-memory caching service (Redis/Memcached)"],"correctAnswer":3,"explanation":"ElastiCache is managed in-memory cache. Improves database and application performance. Supports Redis (persistent, sorted sets) and Memcached.","category":"Database","difficulty":"Advanced"},{"id":"q88","text":"What is AWS Batch?","options":["Batch processing","Data batching","Fully managed batch processing service for large-scale computing","Task batching"],"correctAnswer":2,"explanation":"Batch is for running batch computing workloads at scale. Provisions compute resources, schedules jobs, monitors progress. Cost-effective for large workloads.","category":"Compute","difficulty":"Advanced"},{"id":"q89","text":"What is AWS AppFlow?","options":["Workflow tool","Fully managed integration service for data flow between SaaS applications","Application flow diagram","API management"],"correctAnswer":1,"explanation":"AppFlow connects SaaS applications (Salesforce, Slack, ServiceNow) with AWS services. Automates data flows with transformations and validations.","category":"Integration","difficulty":"Advanced"},{"id":"q90","text":"What is AWS IoT Core?","options":["Managed service for IoT devices to connect and communicate","IoT analytics","IoT storage","Internet storage"],"correctAnswer":0,"explanation":"IoT Core enables IoT devices to securely connect, send data, and receive commands. Supports MQTT, HTTP. Integrates with other AWS services.","category":"Other","difficulty":"Advanced"},{"id":"q91","text":"What is AWS Backup?","options":["Storage backup","Database backup","Centralized managed backup service for AWS resources","Manual backup tool"],"correctAnswer":2,"explanation":"Backup creates centralized backup policies across AWS services (EC2, RDS, DynamoDB, etc.). Automated, compliance-focused, cross-region support.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q92","text":"What is AWS Disaster Recovery (DR) strategies by RTO/RPO?","options":["No DR needed","Pilot light (low RTO/RPO), Warm standby (medium), Hot standby (minimal RTO/RPO)","Backup only","Cold standby only"],"correctAnswer":1,"explanation":"Pilot light maintains minimal version of app ready. Warm standby runs scaled-down version. Hot standby runs at full scale. Trade cost vs recovery speed.","category":"Other","difficulty":"Advanced"},{"id":"q93","text":"What is AWS DataSync?","options":["Data replication","Data backup","Data sync tool","Service for automating large-scale data transfer between on-premises and AWS"],"correctAnswer":3,"explanation":"DataSync automates data transfer from on-premises to AWS (S3, EFS, FSx). Handles network optimization, validation, scheduling.","category":"Storage","difficulty":"Advanced"},{"id":"q94","text":"What is AWS Storage Gateway?","options":["On-premises appliance connecting to AWS storage","Storage acceleration","Cloud storage","Network gateway"],"correctAnswer":0,"explanation":"Storage Gateway is on-premises appliance providing access to AWS storage. File gateway (NFS/SMB), Volume gateway (iSCSI), or Tape gateway.","category":"Storage","difficulty":"Advanced"},{"id":"q95","text":"What is AWS DataPipeline?","options":["Data processing","Analytics service","ETL service","Orchestration service for data workflows"],"correctAnswer":3,"explanation":"DataPipeline defines, schedules, runs data-driven workflows. Moves data between services (S3, RDS, DynamoDB) and provides retry mechanisms.","category":"Analytics","difficulty":"Advanced"},{"id":"q96","text":"What is AWS Lake Formation?","options":["Data warehouse","Storage service","Centralized service for building data lakes on S3","Analytics service"],"correctAnswer":2,"explanation":"Lake Formation simplifies building data lakes. Provides data ingestion, cataloging, security, and access control. Built on Glue and Athena.","category":"Analytics","difficulty":"Advanced"},{"id":"q97","text":"What is AWS License Manager?","options":["License enforcement","License tracking","Software licenses","Manages software licenses across AWS and on-premises"],"correctAnswer":3,"explanation":"License Manager tracks and manages software licenses (Microsoft, SAP, Oracle). Helps optimize spending and maintain compliance.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q98","text":"What is AWS Service Quotas?","options":["Tool for viewing and requesting AWS service quota increases","Resource limits","Service costs","API limits"],"correctAnswer":0,"explanation":"Service Quotas shows current usage and limits for AWS services. Request quota increases through console. Helpful for capacity planning.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q99","text":"What is AWS Well-Architected Framework?","options":["Building design","Design patterns","Best practices for AWS architecture (Operational Excellence, Security, Reliability, Performance, Cost)","Architecture tool"],"correctAnswer":2,"explanation":"Framework provides 5 pillars: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization. Used for AWS architecture reviews.","category":"Other","difficulty":"Advanced"},{"id":"q100","text":"What is AWS CAF (Cloud Adoption Framework)?","options":["Guidance for cloud adoption across organization","Cost analysis","Architecture review","Architecture framework"],"correctAnswer":0,"explanation":"CAF provides methodology for cloud adoption. Covers Business, People, Governance, Platform, Security, Operations perspectives. Helps plan migration strategy.","category":"Other","difficulty":"Advanced"},{"id":"q101","text":"What is the CIA triad?","options":["Confidentiality, Integrity, Availability","Compliance, Identity, Access","Central Intelligence Agency","Classified, Internal, Archive"],"correctAnswer":0,"explanation":"CIA triad is security foundation. Confidentiality (data not disclosed), Integrity (data not modified), Availability (accessible when needed).","category":"Security & Identity","difficulty":"Advanced"},{"id":"q102","text":"What is least privilege principle?","options":["Grant minimum necessary permissions for job function","Give all access","Deny all access","Access all resources"],"correctAnswer":0,"explanation":"Least privilege means users/roles have only permissions needed for their function. Reduces attack surface. Core security principle.","category":"Security & Identity","difficulty":"Beginner"},{"id":"q103","text":"What is defense in depth?","options":["Multiple layers of security controls","Encryption only","One strong firewall","Passwords only"],"correctAnswer":0,"explanation":"Defense in depth uses multiple security layers (network, application, data). If one fails, others provide protection.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q104","text":"What is zero trust security model?","options":["Trust only internal users","Trust all users","Never trust, always verify regardless of location","Trust once, access always"],"correctAnswer":2,"explanation":"Zero trust assumes no trust by default. Every access request requires verification. Applies regardless of network location or device.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q105","text":"What is AWS Compute Optimizer?","options":["Compiles code","Analyzes resources and recommends right-sized instances","Cache optimizer","Optimizes database"],"correctAnswer":1,"explanation":"Optimizer analyzes resource usage patterns and recommends instance types for optimal price/performance. Helps reduce costs.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q106","text":"What is AWS Cost Explorer?","options":["Budget planning","Explores storage","Price comparison","Tool for visualizing, understanding, managing AWS costs"],"correctAnswer":3,"explanation":"Cost Explorer visualizes spending trends, forecasts future costs, recommends cost optimization. Helps identify cost drivers.","category":"Other","difficulty":"Intermediate"},{"id":"q107","text":"What is AWS Budgets?","options":["Set spending limits and receive alerts when approaching threshold","Invoice management","Financial planning","Cost tracking"],"correctAnswer":0,"explanation":"Budgets lets you set spending limits and receive notifications when approaching or exceeding limits. Forecasts costs and provides recommendations.","category":"Other","difficulty":"Beginner"},{"id":"q108","text":"What is CloudWatch Alarms?","options":["Wake-up alarms","Security alerts","Error notifications","Monitors metrics and triggers actions when thresholds met"],"correctAnswer":3,"explanation":"Alarms monitor CloudWatch metrics and trigger SNS notifications, auto-scaling actions, or EC2 actions when thresholds are crossed.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q109","text":"What is CloudWatch Logs Insights?","options":["Log parsing","Log storage","Log filtering","Query logs using SQL-like language to analyze patterns"],"correctAnswer":3,"explanation":"Logs Insights allows querying CloudWatch logs with CloudWatch Logs Insights query syntax. Analyze, search, visualize log data.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q110","text":"What is AWS Systems Manager?","options":["System monitoring","System backup","Unified service for managing AWS resources and on-premises systems","System storage"],"correctAnswer":2,"explanation":"Systems Manager provides automation, patch management, state management for AWS and on-premises resources. Centralized operations console.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q111","text":"What is AWS OpsWorks?","options":["Configuration management service using Chef/Puppet","Operations monitoring","Workflow management","Operational storage"],"correctAnswer":0,"explanation":"OpsWorks uses Chef/Puppet for infrastructure automation and configuration management. Layers model for organizing resources.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q112","text":"What is horizontal scaling vs vertical scaling?","options":["Horizontal = up, Vertical = out","Horizontal = add instances, Vertical = increase instance capacity","No difference","Same thing"],"correctAnswer":1,"explanation":"Horizontal scaling (scaling out) adds more instances. Vertical scaling (scaling up) increases instance capacity (CPU, RAM). Horizontal better for cloud.","category":"Other","difficulty":"Intermediate"},{"id":"q113","text":"What is stateless architecture?","options":["Servers have no memory","Servers store state","No architecture","Servers don't store session data; each request contains all needed info"],"correctAnswer":3,"explanation":"Stateless means servers don't store client session data. Each request is independent, self-contained. Enables better scalability and reliability.","category":"Other","difficulty":"Intermediate"},{"id":"q114","text":"What is sticky session?","options":["Session data stays with same load balancer target","Session expiration","Temporary storage","Session encryption"],"correctAnswer":0,"explanation":"Sticky session ensures requests from client go to same target. Useful for stateful applications but reduces scalability. Use session stores for better scaling.","category":"Networking","difficulty":"Advanced"},{"id":"q115","text":"What is database sharding?","options":["Database replication","Partitioning data across multiple database instances","Database sharing","Database splitting"],"correctAnswer":1,"explanation":"Sharding distributes data across multiple databases by shard key. Improves scalability for large datasets. Each shard stores subset of data.","category":"Database","difficulty":"Advanced"},{"id":"q116","text":"What is eventual consistency vs strong consistency?","options":["Same thing","Eventual = stale reads possible; Strong = immediate consistency","Strong = slower","Eventual = faster"],"correctAnswer":1,"explanation":"Eventual consistency allows brief stale reads but provides high availability. Strong consistency guarantees current data but lower availability.","category":"Database","difficulty":"Advanced"},{"id":"q117","text":"What is idempotency in APIs?","options":["API performance","API design","Same request produces same result regardless of repetitions","Error handling"],"correctAnswer":2,"explanation":"Idempotent operations produce same outcome when called multiple times. Important for retry logic. Prevents duplicate processing.","category":"Integration","difficulty":"Advanced"},{"id":"q118","text":"What is circuit breaker pattern?","options":["Load balancer","Electrical device","Failover mechanism","Design pattern preventing cascading failures by stopping requests to failing service"],"correctAnswer":3,"explanation":"Circuit breaker stops requests to failing service, prevents cascading failures. States: Closed (normal), Open (failing, reject requests), Half-open (testing recovery).","category":"Integration","difficulty":"Advanced"},{"id":"q119","text":"What is bulkhead pattern?","options":["Ship compartment","Security measure","Load balancing","Isolating resources to prevent total system failure"],"correctAnswer":3,"explanation":"Bulkhead pattern isolates components so failure in one doesn't cascade to others. Example: separate thread pools for different services.","category":"Integration","difficulty":"Advanced"},{"id":"q120","text":"What is retry logic backoff strategy?","options":["Random delays","Exponential, linear backoff before retrying failed requests","Immediate retry","No retries"],"correctAnswer":1,"explanation":"Backoff delays retries: linear (1s, 2s, 3s), exponential (1s, 2s, 4s, 8s), random jitter. Prevents overwhelming recovering service.","category":"Integration","difficulty":"Advanced"},{"id":"q121","text":"What is request deduplication?","options":["Request validation","Request filtering","Identifying and ignoring duplicate requests","Removing requests"],"correctAnswer":2,"explanation":"Deduplication uses idempotency keys to detect duplicate requests. Prevents duplicate processing in case of retries or network issues.","category":"Integration","difficulty":"Advanced"},{"id":"q122","text":"What is immutable infrastructure?","options":["Fixed capacity","No scaling","Unchangeable resources","Infrastructure deployed as immutable, replaced rather than updated"],"correctAnswer":3,"explanation":"Immutable infrastructure means resources aren't modified after deployment. Instead, new versions are deployed and old ones replaced. Improves reliability.","category":"Other","difficulty":"Advanced"},{"id":"q123","text":"What is GitOps?","options":["Infrastructure and configuration defined in Git, deployed automatically","Git workflow","Git operations","Version control"],"correctAnswer":0,"explanation":"GitOps uses Git as source of truth for infrastructure. Changes trigger automated deployments. Enables audit trail and rollback capability.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q124","text":"What is service mesh?","options":["Load balancer","Network mesh","Layer managing service-to-service communication","Network topology"],"correctAnswer":2,"explanation":"Service mesh (e.g., Istio) provides networking layer managing service communication. Handles retries, timeouts, security policies, observability.","category":"Networking","difficulty":"Advanced"},{"id":"q125","text":"What is API rate limiting?","options":["Restricting number of requests per time window","API speed","API throttling","Request validation"],"correctAnswer":0,"explanation":"Rate limiting controls requests per time window per client/user. Prevents abuse, ensures fair usage, protects backend from overload.","category":"Integration","difficulty":"Advanced"},{"id":"q126","text":"What is API authentication vs authorization?","options":["Same thing","Authentication = verify identity; Authorization = verify permissions","No difference","Authentication = permissions"],"correctAnswer":1,"explanation":"Authentication proves identity (who you are). Authorization determines what you can access (what you're allowed to do).","category":"Security & Identity","difficulty":"Advanced"},{"id":"q127","text":"What is OAuth 2.0?","options":["Authentication protocol","Authorization framework for third-party access","Encryption protocol","Security standard"],"correctAnswer":1,"explanation":"OAuth 2.0 enables users to grant applications access to resources without sharing passwords. Commonly used for third-party integrations.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q128","text":"What is JWT (JSON Web Token)?","options":["Java Web Token","Java tool","Security token","Stateless token containing user claims for authentication"],"correctAnswer":3,"explanation":"JWT is self-contained token with user info (claims). Stateless, doesn't require server-side session storage. Used in APIs and microservices.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q129","text":"What is mTLS (mutual TLS)?","options":["SSL protocol","Multiple TLS","Both client and server authenticate each other using certificates","TLS encryption"],"correctAnswer":2,"explanation":"mTLS requires both client and server to authenticate. Client sends certificate to server, server verifies. Enhances security for service-to-service communication.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q130","text":"What is API gateway throttling?","options":["Slowing down API","API caching","Request filtering","Limiting request rate to prevent abuse"],"correctAnswer":3,"explanation":"Throttling limits requests per second per user/API key. Protects backend from overload, ensures fair usage, prevents abuse.","category":"Integration","difficulty":"Intermediate"},{"id":"q131","text":"What is CloudFormation drift?","options":["Template updates","Cloud movement","Resource migration","Configuration diverging from CloudFormation template"],"correctAnswer":3,"explanation":"Drift occurs when deployed resources change outside CloudFormation. Detected by drift detection. Indicates configuration inconsistency.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q132","text":"What is infrastructure as code (IaC)?","options":["Code infrastructure","Automation","Managing infrastructure via configuration files rather than manual setup","Programming infrastructure"],"correctAnswer":2,"explanation":"IaC defines infrastructure in version-controlled code (CloudFormation, Terraform). Enables reproducible, auditable infrastructure deployments.","category":"Other","difficulty":"Intermediate"},{"id":"q133","text":"What is configuration management vs orchestration?","options":["Orchestration = state management","CM = manage state of resources, Orchestration = provision and coordinate","No difference","Same thing"],"correctAnswer":1,"explanation":"Configuration management (Puppet, Chef) maintains desired state. Orchestration (Terraform, CloudFormation) provisions and coordinates resources.","category":"Other","difficulty":"Advanced"},{"id":"q134","text":"What is container orchestration?","options":["Container storage","Managing container deployment, scaling, networking","Container security","Container testing"],"correctAnswer":1,"explanation":"Orchestration platforms (ECS, EKS) manage container deployment, scaling, networking, storage. Automate container lifecycle management.","category":"Compute","difficulty":"Advanced"},{"id":"q135","text":"What is ECS vs EKS?","options":["Same service","EKS = simpler","ECS = AWS native container orchestration, EKS = AWS-managed Kubernetes","ECS = Kubernetes"],"correctAnswer":2,"explanation":"ECS is AWS's container orchestration service. EKS is AWS-managed Kubernetes. ECS simpler, EKS more flexible for multi-cloud.","category":"Compute","difficulty":"Advanced"},{"id":"q136","text":"What is Docker?","options":["Port management tool","Container orchestration","Container platform for packaging applications with dependencies","Virtual machine"],"correctAnswer":2,"explanation":"Docker is containerization platform. Packages application, dependencies, configuration in isolated container. Lightweight, portable, consistent across environments.","category":"Compute","difficulty":"Intermediate"},{"id":"q137","text":"What is microservices architecture?","options":["Small database","Application composed of loosely coupled, independently deployable services","Monolithic","Service-oriented"],"correctAnswer":1,"explanation":"Microservices break application into small, independent services. Each service owns data, communicates via APIs. Enables scalability, agility, independent deployment.","category":"Other","difficulty":"Advanced"},{"id":"q138","text":"What is monolithic vs microservices?","options":["Monolithic = better","Microservices = slower","Monolithic = single deployment; Microservices = multiple independent services","Same architecture"],"correctAnswer":2,"explanation":"Monolithic = single codebase, single deployment. Hard to scale, update, maintain. Microservices = multiple services, independent scaling/deployment. More complex.","category":"Other","difficulty":"Advanced"},{"id":"q139","text":"What is serverless architecture?","options":["Limited servers","Virtual servers","Computing model where cloud provider manages servers, dev focuses on code","No servers"],"correctAnswer":2,"explanation":"Serverless abstracts server management. Pay per execution, auto-scale. Examples: Lambda, API Gateway, DynamoDB. Cost-effective for variable workloads.","category":"Compute","difficulty":"Intermediate"},{"id":"q140","text":"What is event-driven architecture?","options":["Time-based events","User events","System components react to events (messages, triggers)","Scheduled events"],"correctAnswer":2,"explanation":"Event-driven uses events to trigger actions. Components loosely coupled, communicate via events. Enables scalable, responsive systems.","category":"Integration","difficulty":"Advanced"},{"id":"q141","text":"What is the 12-factor app methodology?","options":["12 servers","Best practices for building cloud-native applications","Development stages","12 principles"],"correctAnswer":1,"explanation":"12 factors: codebase, dependencies, config, backing services, build/run/release, processes, port binding, concurrency, disposability, dev/prod parity, logs, admin processes.","category":"Other","difficulty":"Advanced"},{"id":"q142","text":"What is CI/CD pipeline?","options":["Release management","Build process","Continuous Integration (automated testing) and Continuous Deployment (automated releases)","Data pipeline"],"correctAnswer":2,"explanation":"CI = automated tests on code changes. CD = automated deployment to production. Enables rapid, reliable software delivery.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q143","text":"What is observability?","options":["Monitoring","Alerting","Understanding system behavior from external outputs (logs, metrics, traces)","Metrics only"],"correctAnswer":2,"explanation":"Observability = understanding system from external outputs: logs (events), metrics (numerical), traces (request flow). Goes beyond monitoring to include distributed tracing.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q144","text":"What is distributed tracing?","options":["Error tracking","Multi-location tracking","Tracking request flow across microservices","Performance monitoring"],"correctAnswer":2,"explanation":"Distributed tracing follows request through multiple services, showing latency at each step. Helps identify bottlenecks in microservices architecture.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q145","text":"What is synthetic monitoring?","options":["Performance testing","Simulating user traffic to test application availability/performance","Endpoint monitoring","Real user monitoring"],"correctAnswer":1,"explanation":"Synthetic monitoring simulates user interactions (API calls, page loads) to proactively detect issues. Different from real user monitoring (RUM).","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q146","text":"What is SLA (Service Level Agreement)?","options":["Availability guarantee","Performance target","Contract commitment for service availability/performance","Software license"],"correctAnswer":2,"explanation":"SLA defines guaranteed service level (e.g., 99.9% uptime). Includes penalties if not met. Different from SLO (internal target) and SLI (actual measurement).","category":"Other","difficulty":"Advanced"},{"id":"q147","text":"What is SLO (Service Level Objective)?","options":["Performance metric","Service level outcome","Contract term","Internal performance target (e.g., 99.95% uptime)"],"correctAnswer":3,"explanation":"SLO is internal target (stricter than SLA). SLA = external commitment, SLO = internal goal, SLI = actual measurement.","category":"Other","difficulty":"Advanced"},{"id":"q148","text":"What is error budget?","options":["Error handling","Acceptable downtime/errors per period based on SLO","Budget for errors","Failure allowance"],"correctAnswer":1,"explanation":"Error budget = 100% minus SLO target. For 99.9% SLO, error budget is 0.1%. Determines how many errors acceptable before violating SLO.","category":"Other","difficulty":"Advanced"},{"id":"q149","text":"What is MTTR (Mean Time To Recovery)?","options":["Average time to restore service after failure","Mean time to repair","Repair time","Recovery duration"],"correctAnswer":0,"explanation":"MTTR measures average time from failure detection to service restoration. Lower MTTR = faster recovery = better reliability.","category":"Other","difficulty":"Advanced"},{"id":"q150","text":"What is MTTF (Mean Time To Failure)?","options":["Mean time to fix","Failure detection time","Repair time","Average time between failures"],"correctAnswer":3,"explanation":"MTTF measures average time between failures. Higher MTTF = better reliability. Availability = MTTF / (MTTF + MTTR).","category":"Other","difficulty":"Advanced"},{"id":"q151","text":"What is AWS Glue Data Catalog?","options":["Data index","Database catalog","Centralized metadata repository for all data assets","Data storage"],"correctAnswer":2,"explanation":"Data Catalog stores metadata about data sources, tables, columns. Enables data discovery, ETL job authoring, querying via Athena/Redshift.","category":"Analytics","difficulty":"Advanced"},{"id":"q152","text":"What is AWS QuickSight?","options":["Analytics tool","Dashboard builder","Business intelligence and visualization service","Quick storage"],"correctAnswer":2,"explanation":"QuickSight is business analytics service. Create dashboards, visualizations from various data sources. SPICE engine for in-memory analytics.","category":"Analytics","difficulty":"Advanced"},{"id":"q153","text":"What is AWS Forecast?","options":["Machine learning service for time series forecasting","Analytics service","Weather prediction","Prediction model"],"correctAnswer":0,"explanation":"Forecast builds ML models for time series forecasting (demand, resource needs). Requires historical time series data.","category":"Analytics","difficulty":"Advanced"},{"id":"q154","text":"What is AWS Lookout for Metrics?","options":["Detects anomalies in metrics using ML","Metrics analysis","Monitoring service","Metric measurement"],"correctAnswer":0,"explanation":"Lookout for Metrics uses ML to detect unexpected behavior changes in metrics (revenue, traffic, etc.). Alerts on anomalies.","category":"Analytics","difficulty":"Advanced"},{"id":"q155","text":"What is AWS Lookout for Equipment?","options":["IoT monitoring","Detects anomalies in equipment sensor data using ML","Equipment monitoring","Sensor data"],"correctAnswer":1,"explanation":"Lookout for Equipment analyzes sensor data from industrial equipment to detect abnormal patterns indicating potential failures.","category":"Analytics","difficulty":"Advanced"},{"id":"q156","text":"What is AWS Personalize?","options":["Recommendation engine","Personalization service","ML service for creating personalized recommendations","User preferences"],"correctAnswer":2,"explanation":"Personalize builds ML models for personalized recommendations. Pre-trained models, integrates into applications easily.","category":"Analytics","difficulty":"Advanced"},{"id":"q157","text":"What is AWS Textract?","options":["Text recognition","Text extraction","Document parsing","OCR service for extracting text from documents"],"correctAnswer":3,"explanation":"Textract extracts text, forms, and tables from documents (images, PDFs). Uses ML for accurate extraction. Integrates with other services.","category":"Analytics","difficulty":"Advanced"},{"id":"q158","text":"What is AWS Macie?","options":["Data classification","Service that uses ML to discover and protect sensitive data","Data security","Encryption"],"correctAnswer":1,"explanation":"Macie uses ML to discover PII, sensitive data in S3. Monitors S3 buckets, alerts on policy violations, integrates with Security Hub.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q159","text":"What is AWS GuardDuty?","options":["Access guard","Threat detection service using ML and analytics","Security monitoring","Intrusion detection"],"correctAnswer":1,"explanation":"GuardDuty analyzes CloudTrail, VPC Flow Logs, DNS logs for threats. Detects unauthorized activity, crypto mining, attacks.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q160","text":"What is AWS Security Hub?","options":["Centralized security monitoring and compliance service","Security center","Audit logs","Security dashboard"],"correctAnswer":0,"explanation":"Security Hub aggregates findings from GuardDuty, Macie, Inspector, and other tools. Provides compliance checking and security posture monitoring.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q161","text":"What is AWS Inspector?","options":["Compliance checking","Vulnerability assessment service for EC2 and container images","Code inspection","Security scanning"],"correctAnswer":1,"explanation":"Inspector runs vulnerability assessments on EC2 instances and container images. Identifies CVEs, network reachability issues.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q162","text":"What is AWS Certificate Manager?","options":["Certificate authority","Provisions and manages SSL/TLS certificates","SSL management","Certificate storage"],"correctAnswer":1,"explanation":"ACM provisions certificates (free for AWS services). Auto-renewal, integrates with ALB, CloudFront, API Gateway.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q163","text":"What is AWS Secrets Manager vs Systems Manager Parameter Store?","options":["Parameter Store = secrets","Secrets Manager = rotating secrets, Parameter Store = configuration parameters","Same service","Same functionality"],"correctAnswer":1,"explanation":"Secrets Manager manages secrets (passwords, API keys) with automatic rotation. Parameter Store stores configuration. Secrets Manager more expensive but feature-rich.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q164","text":"What is AWS SDK?","options":["Libraries for interacting with AWS services programmatically","API toolkit","Command-line tool","Software development kit"],"correctAnswer":0,"explanation":"AWS SDKs provide language-specific libraries (Python boto3, Java, Node.js, etc.) for programmatic AWS API access.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q165","text":"What is AWS CLI (Command Line Interface)?","options":["Shell interface","Cloud line interface","Terminal tool","Command-line tool for interacting with AWS services"],"correctAnswer":3,"explanation":"AWS CLI allows managing AWS services from command line. Scriptable, useful for automation. Based on AWS SDKs.","category":"Developer Tools","difficulty":"Beginner"},{"id":"q166","text":"What is AWS SAM (Serverless Application Model)?","options":["Serverless app","Development tool","Application model","Framework for building serverless applications"],"correctAnswer":3,"explanation":"SAM is extension of CloudFormation for serverless. Simplifies Lambda, API Gateway, DynamoDB definition. Includes local testing tools.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q167","text":"What is AWS Lambda runtime?","options":["Execution environment for Lambda functions (Python, Node.js, Java, etc.)","Execution engine","Performance metric","Function timer"],"correctAnswer":0,"explanation":"Lambda runtimes = environments for code execution (Python 3.9, Node.js 14, Java 11, etc.). Supported runtimes vary by service update.","category":"Compute","difficulty":"Intermediate"},{"id":"q168","text":"What is Lambda environment variables?","options":["Configuration settings","Function parameters","Variable declarations","Key-value pairs passed to function at runtime"],"correctAnswer":3,"explanation":"Environment variables pass configuration to Lambda functions. Avoid hardcoding secrets; use Secrets Manager instead.","category":"Compute","difficulty":"Intermediate"},{"id":"q169","text":"What is Lambda reserved concurrency?","options":["Reserve specific concurrency for function, guaranteed but not counted against account limit","Concurrent functions","Function concurrency","Concurrent execution"],"correctAnswer":0,"explanation":"Reserved concurrency guarantees capacity but consumes against account limit. Ensures function priority. Provisioned concurrency keeps function warm.","category":"Compute","difficulty":"Advanced"},{"id":"q170","text":"What is Lambda provisioned concurrency?","options":["Pre-initializes Lambda functions to avoid cold starts","Reserved capacity","Warm instances","Function pooling"],"correctAnswer":0,"explanation":"Provisioned concurrency pre-initializes functions, eliminating cold starts. More expensive but provides consistent latency.","category":"Compute","difficulty":"Advanced"},{"id":"q171","text":"What is API Gateway stages?","options":["Deployment phases","Environments for APIs (dev, staging, prod)","Release stages","API version"],"correctAnswer":1,"explanation":"Stages enable managing different environments for same API. Each stage has own settings, throttling, caching. Useful for testing before production.","category":"Integration","difficulty":"Intermediate"},{"id":"q172","text":"What is API Gateway models?","options":["JSON schema defining request/response structure","API design","Database models","Data structures"],"correctAnswer":0,"explanation":"Models validate request/response structure. Define schema, enable validation. Helps ensure API contract adherence.","category":"Integration","difficulty":"Advanced"},{"id":"q173","text":"What is API Gateway authorizers?","options":["Permission granter","Lambda functions or tokens validating API requests","Authentication method","Access control"],"correctAnswer":1,"explanation":"Authorizers (Lambda or token-based) authenticate/authorize API requests. Can validate JWT, API keys, OAuth tokens.","category":"Integration","difficulty":"Advanced"},{"id":"q174","text":"What is DynamoDB streams?","options":["Data replication","Change log","Data streaming","Ordered log of item modifications triggering events"],"correctAnswer":3,"explanation":"Streams capture changes to DynamoDB items. Each change creates record. Enables triggering Lambda, replication, analytics.","category":"Database","difficulty":"Advanced"},{"id":"q175","text":"What is DynamoDB transactions?","options":["ACID transactions across multiple items/tables","Transaction processing","Atomic operations","Database transaction"],"correctAnswer":0,"explanation":"DynamoDB transactions enable atomic operations across multiple items/tables. All-or-nothing: commit or rollback entirely.","category":"Database","difficulty":"Advanced"},{"id":"q176","text":"What is RDS automated backups?","options":["Automatic daily backups with point-in-time restore","Daily snapshots","Manual backup","Backup automation"],"correctAnswer":0,"explanation":"Automated backups create daily snapshots, retention configurable (1-35 days). Enable point-in-time recovery.","category":"Database","difficulty":"Intermediate"},{"id":"q177","text":"What is RDS manual snapshots?","options":["Automatic backup","Scheduled snapshots","Backup copies","User-initiated database snapshots for long-term retention"],"correctAnswer":3,"explanation":"Manual snapshots persist indefinitely (until deleted). Useful for backups before major operations or compliance archival.","category":"Database","difficulty":"Intermediate"},{"id":"q178","text":"What is cross-region read replica?","options":["Regional replication","Cross-region backup","Read replica in different AWS region from primary","Same-region replica"],"correctAnswer":2,"explanation":"Cross-region replicas enable read scaling across regions, disaster recovery, reduced read latency for geographically distant users.","category":"Database","difficulty":"Advanced"},{"id":"q179","text":"What is AWS resource tags?","options":["Labels","Resource identifiers","Resource naming","Key-value pairs for organizing and managing AWS resources"],"correctAnswer":3,"explanation":"Tags organize resources by project, environment, cost center, etc. Enable cost allocation, automation, access control based on tags.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q180","text":"What is tag-based access control?","options":["Permission control","Resource access","Tag management","IAM policies granting/denying access based on resource tags"],"correctAnswer":3,"explanation":"IAM policies can reference tags. Allow access to resources with specific tags. Useful for role-based access based on tags.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q181","text":"What is AWS Cost Allocation Tags?","options":["Budget tags","Tags for grouping costs in billing reports","Expense tags","Cost tracking"],"correctAnswer":1,"explanation":"Cost allocation tags enable tracking costs by department, project, etc. Appear in Cost Explorer and billing reports for chargeback.","category":"Other","difficulty":"Intermediate"},{"id":"q182","text":"What is AWS Savings Plans?","options":["Commitment to compute usage for 1 or 3 years at discount","Discount program","Payment option","Cost reduction"],"correctAnswer":0,"explanation":"Savings Plans offer up to 72% discount vs on-demand. Commit to 1 or 3 year usage. More flexible than Reserved Instances.","category":"Other","difficulty":"Intermediate"},{"id":"q183","text":"What is AWS compute optimizer recommendations?","options":["Right-sizing recommendations for EC2, RDS, Lambda based on usage","Capacity planning","Instance type","Performance optimization"],"correctAnswer":0,"explanation":"Optimizer analyzes metrics and recommends better instance types, memory, CPU. Helps reduce costs and improve performance.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q184","text":"What is AWS Architecture Review Framework?","options":["Design review","Best practices checklist","Architecture tool","Assessment of architecture against well-architected pillars"],"correctAnswer":3,"explanation":"Assessment identifies risks in 5 pillars (operational excellence, security, reliability, performance, cost). Provides recommendations.","category":"Other","difficulty":"Advanced"},{"id":"q185","text":"What is AWS Compliance?","options":["Standard adherence","Security compliance","Certification","AWS meets various compliance standards (SOC 2, ISO, HIPAA, PCI, FedRAMP, GDPR)"],"correctAnswer":3,"explanation":"AWS maintains compliance with multiple standards. Compliance artifacts available for customers. Responsibility shared between AWS and customer.","category":"Other","difficulty":"Intermediate"},{"id":"q186","text":"What is AWS shared responsibility model?","options":["AWS secures infrastructure; Customer secures applications and data","Divided responsibility","Security sharing","Shared security"],"correctAnswer":0,"explanation":"AWS responsible for infrastructure. Customer responsible for OS patching, application security, data protection. Varies by service type.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q187","text":"What is AWS artifact?","options":["Download compliance reports, SOC 2, PCI DSS documentation","Build artifact","Deployment artifact","Compliance documentation"],"correctAnswer":0,"explanation":"Artifact provides on-demand access to AWS compliance reports, certifications. Required for compliance audits.","category":"Other","difficulty":"Intermediate"},{"id":"q188","text":"What is AWS Service Control Policies (SCPs)?","options":["Access control","Permissions policies at organization level limiting member account permissions","Service policy","Organization policy"],"correctAnswer":1,"explanation":"SCPs control maximum permissions for accounts in AWS Organizations. Don't grant permissions, only set upper limit.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q189","text":"What is AWS Permission Boundaries?","options":["Permission limit","IAM feature limiting maximum permissions for users/roles","Boundary setting","Access boundary"],"correctAnswer":1,"explanation":"Permission boundaries set maximum permissions. Useful preventing users from creating over-privileged roles. Works with SCPs.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q190","text":"What is AWS Assume Role?","options":["Security feature allowing entities to temporarily assume role permissions","Temporary permissions","Role switching","Role assignment"],"correctAnswer":0,"explanation":"AssumeRole (sts:AssumeRole) allows assuming role and getting temporary credentials. Used for cross-account access, service roles.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q191","text":"What is AWS STS (Security Token Service)?","options":["Secure token","Service for issuing temporary security credentials","Credential service","Token management"],"correctAnswer":1,"explanation":"STS issues temporary credentials (access key, secret key, session token) via AssumeRole, GetSessionToken, etc. Used for temporary access.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q192","text":"What is AWS resource-based policy?","options":["Resource policy","Access policy","Bucket policy","Policy attached to resource (S3 bucket, SQS queue) granting access"],"correctAnswer":3,"explanation":"Resource-based policies attached to resources themselves (S3 bucket, SQS, SNS). Specify who can access and what actions allowed.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q193","text":"What is AWS cross-account access?","options":["Allowing users in one account to access resources in another account","Account access","Multi-account access","Account sharing"],"correctAnswer":0,"explanation":"Cross-account access via assuming role in target account. Requires trust relationship and permission policy. Enables access control across accounts.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q194","text":"What is AWS MFA (Multi-Factor Authentication)?","options":["Two-factor","Multiple factors","Extra security","Requires second factor (authenticator app, hardware key) for account access"],"correctAnswer":3,"explanation":"MFA requires second factor after password. Supports virtual MFA devices, hardware keys, SMS. Significantly improves security.","category":"Security & Identity","difficulty":"Beginner"},{"id":"q195","text":"What is AWS root account?","options":["Admin account","Master account created when AWS account registered; highest privileges","Main account","Primary account"],"correctAnswer":1,"explanation":"Root account has unrestricted access. Best practice: enable MFA, avoid using root for daily work. Create IAM users instead.","category":"Security & Identity","difficulty":"Beginner"},{"id":"q196","text":"What is password policy?","options":["Access policy","User policy","Rules enforcing password complexity, expiration, history","Security rules"],"correctAnswer":2,"explanation":"Password policies enforce minimum length, complexity, expiration, reuse prevention. Improves account security.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q197","text":"What is AWS access key?","options":["SSH key","Authentication key","API key","Credentials (access key ID + secret key) for programmatic access"],"correctAnswer":3,"explanation":"Access keys used for AWS API, CLI, SDK access. Different from passwords. Can be rotated. Access key ID = username, secret = password.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q198","text":"What is AWS credential rotation?","options":["Key rotation","Secret management","Key management","Regularly replacing access keys, passwords to reduce exposure"],"correctAnswer":3,"explanation":"Credential rotation regularly replaces access keys, secrets. Reduces impact if credentials compromised. Best practice: monthly rotation.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q199","text":"What is AWS IP whitelist?","options":["IP blocking","Restricting access to specific IP addresses or ranges","Access restriction","IP filtering"],"correctAnswer":1,"explanation":"IP whitelisting allows access from specific IPs (security groups, NACLs, IAM policies). Used to restrict access geographically or to known networks.","category":"Networking","difficulty":"Intermediate"},{"id":"q200","text":"What is AWS VPC Endpoint?","options":["Network endpoint","Service endpoint","Virtual endpoint","Private connection from VPC to AWS services without internet"],"correctAnswer":3,"explanation":"VPC Endpoints (Gateway or Interface) enable private connection to AWS services (S3, DynamoDB, etc.) without traversing internet. Reduces exposure.","category":"Networking","difficulty":"Advanced"},{"id":"q201","text":"What happens to data on an EC2 instance store volume when the instance is stopped or terminated?","options":["It is moved to EBS","It is automatically backed up to S3","It persists until manually deleted","It is lost"],"correctAnswer":3,"explanation":"Instance store is ephemeral storage physically attached to the host. Data is lost when the instance stops, hibernates, or terminates. Use EBS for persistent block storage.","category":"Compute","difficulty":"Beginner"},{"id":"q202","text":"Which EC2 purchasing options exist?","options":["Free, Paid, Enterprise","Hourly, Daily, Monthly","Basic, Standard, Premium","On-Demand, Reserved, Spot, Savings Plans, Dedicated"],"correctAnswer":3,"explanation":"EC2 offers On-Demand (pay as you go), Reserved Instances, Spot (spare capacity discounts), Savings Plans (commitment-based), and Dedicated Hosts/Instances (single-tenant hardware).","category":"Compute","difficulty":"Beginner"},{"id":"q203","text":"What is EC2 user data used for?","options":["Running a script automatically when the instance first boots","Encrypting user sessions","Storing user files","Tagging instances with owner info"],"correctAnswer":0,"explanation":"User data is a script (e.g., bash or cloud-init) passed at launch that runs on first boot. It's commonly used to install software and bootstrap configuration.","category":"Compute","difficulty":"Intermediate"},{"id":"q204","text":"Why does AWS recommend requiring IMDSv2 on EC2 instances?","options":["It is session-based and blocks many SSRF credential-theft attacks","It enables IPv6 metadata","It provides faster metadata responses","It encrypts EBS volumes automatically"],"correctAnswer":0,"explanation":"IMDSv2 requires a session token obtained via a PUT request before metadata can be read, defeating most SSRF attacks that steal instance role credentials via IMDSv1's open GET endpoint.","category":"Compute","difficulty":"Advanced"},{"id":"q205","text":"A workload needs the lowest possible network latency between EC2 instances. Which placement group should you use?","options":["Partition placement group","Spread placement group","Cluster placement group","Multi-AZ placement group"],"correctAnswer":2,"explanation":"Cluster placement groups pack instances close together in a single AZ for low latency and high throughput. Spread and partition groups prioritize fault isolation instead.","category":"Compute","difficulty":"Advanced"},{"id":"q206","text":"What is the maximum execution timeout for an AWS Lambda function?","options":["5 minutes","1 hour","15 minutes","No limit"],"correctAnswer":2,"explanation":"Lambda functions can run for at most 15 minutes per invocation. Longer workloads should use ECS/Fargate, Batch, or Step Functions to orchestrate shorter steps.","category":"Compute","difficulty":"Intermediate"},{"id":"q207","text":"What is a Lambda alias?","options":["An environment variable","A pointer to a specific function version that can shift traffic between versions","A copy of the function in another region","A second name for the AWS account"],"correctAnswer":1,"explanation":"An alias is a named pointer (e.g., 'prod') to a function version. You can update where it points and even split traffic between two versions for canary releases.","category":"Compute","difficulty":"Intermediate"},{"id":"q208","text":"In Amazon ECS, what is a task definition?","options":["A scheduled cron job","A list of EC2 instances","The service auto-scaling policy","A JSON blueprint describing the containers, CPU, memory, and networking for a task"],"correctAnswer":3,"explanation":"A task definition is the blueprint for running containers: image, CPU/memory, ports, environment, IAM role. Services then run and maintain copies of that task.","category":"Compute","difficulty":"Intermediate"},{"id":"q209","text":"What is the key difference between the Fargate and EC2 launch types in ECS?","options":["Fargate is always cheaper","Fargate only runs Windows containers","EC2 launch type is serverless","With Fargate AWS manages the underlying servers; with EC2 you manage the container instances"],"correctAnswer":3,"explanation":"Fargate is serverless — you pay per task's vCPU/memory and never manage hosts. The EC2 launch type runs tasks on EC2 container instances you provision and patch yourself.","category":"Compute","difficulty":"Intermediate"},{"id":"q210","text":"What is AWS App Runner?","options":["A mobile app testing service","A CI/CD pipeline tool","An EC2 management console","A fully managed service that builds and runs containerized web apps directly from source or an image"],"correctAnswer":3,"explanation":"App Runner deploys web applications and APIs from source code or a container image with automatic build, deploy, scaling, and load balancing — no infrastructure to manage.","category":"Compute","difficulty":"Intermediate"},{"id":"q211","text":"What durability does Amazon S3 Standard provide?","options":["100%","99.9%","99.99%","99.999999999% (11 nines)"],"correctAnswer":3,"explanation":"S3 is designed for 99.999999999% (11 nines) durability by redundantly storing objects across multiple devices and Availability Zones. Availability SLA is separate (99.99% design for Standard).","category":"Storage","difficulty":"Beginner"},{"id":"q212","text":"What is the maximum size of a single S3 object?","options":["500 GB","Unlimited","5 TB","5 GB"],"correctAnswer":2,"explanation":"A single S3 object can be up to 5 TB. Uploads larger than 5 GB must use multipart upload; AWS recommends multipart for anything over 100 MB.","category":"Storage","difficulty":"Intermediate"},{"id":"q213","text":"When is S3 multipart upload required?","options":["For objects larger than 5 GB","For cross-region uploads","For encrypted objects","For all uploads"],"correctAnswer":0,"explanation":"Single PUT uploads max out at 5 GB, so larger objects must be uploaded in parts. Multipart also improves throughput and retry behavior for objects over 100 MB.","category":"Storage","difficulty":"Intermediate"},{"id":"q214","text":"What does an S3 presigned URL do?","options":["Encrypts the object","Speeds up downloads via edge caching","Makes a bucket permanently public","Grants temporary, time-limited access to a specific object using the signer's credentials"],"correctAnswer":3,"explanation":"A presigned URL embeds a signature so anyone holding it can GET or PUT that one object until the URL expires. Access rides on the permissions of whoever signed it.","category":"Storage","difficulty":"Intermediate"},{"id":"q215","text":"Which S3 server-side encryption option lets you manage keys in AWS KMS with audit trails?","options":["SSE-C","SSE-S3","SSE-KMS","Client-side encryption"],"correctAnswer":2,"explanation":"SSE-KMS uses KMS keys, giving key rotation control, per-key policies, and CloudTrail auditing of key usage. SSE-S3 uses S3-managed keys; SSE-C requires you to send your own key.","category":"Storage","difficulty":"Advanced"},{"id":"q216","text":"What must be enabled on both buckets before configuring S3 Cross-Region Replication?","options":["Versioning","Requester Pays","Transfer Acceleration","Object Lock"],"correctAnswer":0,"explanation":"CRR (and same-region replication) requires versioning on both source and destination buckets, since replication tracks object versions.","category":"Storage","difficulty":"Advanced"},{"id":"q217","text":"Which EBS volume type offers provisioned IOPS with the highest durability for critical databases?","options":["st1","io2 Block Express","sc1","gp3"],"correctAnswer":1,"explanation":"io2 (Block Express) provides provisioned IOPS up to 256,000 with 99.999% durability, aimed at I/O-intensive databases. gp3 is general purpose; st1/sc1 are throughput-oriented HDD.","category":"Storage","difficulty":"Advanced"},{"id":"q218","text":"How are EBS snapshots stored and billed?","options":["As full copies on the instance","On a second EBS volume","Incrementally in S3 — only changed blocks are saved after the first snapshot","In EFS"],"correctAnswer":2,"explanation":"Snapshots are stored in S3 (managed by AWS) and are incremental: after the first full snapshot, only changed blocks are stored, reducing cost.","category":"Storage","difficulty":"Intermediate"},{"id":"q219","text":"Which workload is a good fit for EC2 instance store?","options":["Temporary caches, buffers, and scratch data needing very high IOPS","Shared files across many instances","A relational database's primary storage","Long-term archives"],"correctAnswer":0,"explanation":"Instance store offers very high random I/O at no extra cost but is ephemeral, so it suits caches, temp files, and replicated/redistributable data — not durable primary storage.","category":"Storage","difficulty":"Intermediate"},{"id":"q220","text":"Which FSx variant should you choose for a high-performance computing (HPC) workload?","options":["FSx for Lustre","FSx for OpenZFS","FSx for Windows File Server","FSx for NetApp ONTAP"],"correctAnswer":0,"explanation":"FSx for Lustre is built for HPC and ML workloads needing massive parallel throughput, and can link to S3. FSx for Windows serves SMB shares with Active Directory integration.","category":"Storage","difficulty":"Advanced"},{"id":"q221","text":"What is Amazon Aurora?","options":["A MySQL- and PostgreSQL-compatible relational database built for the cloud","An in-memory cache","A data warehouse","A NoSQL database"],"correctAnswer":0,"explanation":"Aurora is AWS's cloud-native relational engine compatible with MySQL and PostgreSQL, offering up to 5x/3x their throughput with storage replicated six ways across three AZs.","category":"Database","difficulty":"Beginner"},{"id":"q222","text":"What does the partition key do in a DynamoDB table?","options":["Orders query results","Sets the item's expiry","Encrypts the item","Determines the physical partition where the item is stored via hashing"],"correctAnswer":3,"explanation":"DynamoDB hashes the partition key to distribute items across partitions. A well-chosen, high-cardinality key spreads traffic evenly and avoids hot partitions.","category":"Database","difficulty":"Intermediate"},{"id":"q223","text":"When should you choose DynamoDB on-demand capacity mode over provisioned?","options":["When the table is small","When traffic is steady and predictable","When traffic is spiky or unknown and you want pay-per-request","When you need transactions"],"correctAnswer":2,"explanation":"On-demand bills per request and absorbs unpredictable spikes without capacity planning. Provisioned (optionally with auto scaling) is cheaper for steady, predictable traffic.","category":"Database","difficulty":"Intermediate"},{"id":"q224","text":"What is DynamoDB Accelerator (DAX)?","options":["A data migration tool","A backup service","A query language","An in-memory cache in front of DynamoDB delivering microsecond reads"],"correctAnswer":3,"explanation":"DAX is a fully managed, API-compatible caching layer for DynamoDB that cuts read latency from milliseconds to microseconds for read-heavy workloads, with no application rewrite.","category":"Database","difficulty":"Advanced"},{"id":"q225","text":"What does DynamoDB TTL (Time to Live) do?","options":["Sets connection timeouts","Rotates encryption keys","Limits query duration","Automatically deletes items after a per-item timestamp expires, at no extra cost"],"correctAnswer":3,"explanation":"TTL marks a numeric attribute as an expiry timestamp; DynamoDB deletes expired items in the background for free. Useful for sessions, logs, and temporary data.","category":"Database","difficulty":"Intermediate"},{"id":"q226","text":"A serverless app exhausts database connections under load. Which service helps most?","options":["RDS Proxy","Read replicas","DynamoDB Streams","ElastiCache"],"correctAnswer":0,"explanation":"RDS Proxy pools and shares database connections, protecting RDS/Aurora from connection storms typical of Lambda-based apps, and speeds up failover.","category":"Database","difficulty":"Advanced"},{"id":"q227","text":"What is Aurora Serverless?","options":["Aurora without storage","Aurora running on Lambda","An Aurora configuration that automatically scales database capacity up and down based on load","A free tier of Aurora"],"correctAnswer":2,"explanation":"Aurora Serverless (v2) scales capacity in fine-grained increments based on demand and is ideal for variable or infrequent workloads — you pay for capacity actually used.","category":"Database","difficulty":"Intermediate"},{"id":"q228","text":"Which ElastiCache engine supports persistence, replication, and sorted sets?","options":["Memcached","Neither","Redis","Both equally"],"correctAnswer":2,"explanation":"Redis supports snapshots/AOF persistence, replication with failover, pub/sub, and rich data structures. Memcached is simpler: multithreaded, in-memory only, no persistence.","category":"Database","difficulty":"Intermediate"},{"id":"q229","text":"What type of database is Amazon Neptune?","options":["Graph","Document","Time series","Ledger"],"correctAnswer":0,"explanation":"Neptune is a managed graph database supporting property graphs (Gremlin, openCypher) and RDF (SPARQL) — ideal for social networks, recommendations, and fraud detection.","category":"Database","difficulty":"Beginner"},{"id":"q230","text":"Amazon DocumentDB is compatible with which database API?","options":["Redis","Cassandra","MongoDB","Oracle"],"correctAnswer":2,"explanation":"DocumentDB is a managed document database with MongoDB compatibility. (Amazon Keyspaces provides Cassandra compatibility.)","category":"Database","difficulty":"Beginner"},{"id":"q231","text":"Which Route 53 routing policy distributes traffic across resources in proportions you define?","options":["Weighted","Latency-based","Failover","Simple"],"correctAnswer":0,"explanation":"Weighted routing assigns each record a weight (e.g., 90/10) — useful for gradual rollouts and A/B testing. Latency routes to the lowest-latency region; failover handles DR.","category":"Networking","difficulty":"Intermediate"},{"id":"q232","text":"Why use a Route 53 alias record instead of a CNAME?","options":["Aliases work with any DNS provider","Aliases are encrypted","CNAMEs are deprecated","Aliases can map the zone apex (example.com) to AWS resources and queries are free"],"correctAnswer":3,"explanation":"CNAME records aren't allowed at the zone apex, but alias records are, and they resolve to ELB/CloudFront/S3 targets at no query charge, tracking the target's IP changes automatically.","category":"Networking","difficulty":"Advanced"},{"id":"q233","text":"What does an Internet Gateway (IGW) do?","options":["Provides VPN access","Allows communication between a VPC and the internet","Filters malicious traffic","Connects two VPCs"],"correctAnswer":1,"explanation":"An IGW is a horizontally scaled VPC component enabling internet connectivity for resources with public IPs whose subnets route 0.0.0.0/0 to the IGW.","category":"Networking","difficulty":"Beginner"},{"id":"q234","text":"What makes a subnet 'public' in AWS?","options":["It has more IP addresses","Its route table has a route to an Internet Gateway","It uses IPv6","Its name contains 'public'"],"correctAnswer":1,"explanation":"A subnet is public when its route table sends 0.0.0.0/0 traffic to an Internet Gateway. Private subnets lack that route and typically reach out via a NAT Gateway.","category":"Networking","difficulty":"Beginner"},{"id":"q235","text":"You must connect dozens of VPCs and on-premises networks with centralized routing. What should you use?","options":["CloudFront","AWS Transit Gateway","Many VPC peering connections","Multiple internet gateways"],"correctAnswer":1,"explanation":"Transit Gateway is a hub-and-spoke router connecting thousands of VPCs and VPN/Direct Connect links, replacing unscalable full-mesh peering (peering is fine for a few VPCs).","category":"Networking","difficulty":"Advanced"},{"id":"q236","text":"How does AWS Global Accelerator differ from CloudFront?","options":["They are identical","Global Accelerator is only for S3","Global Accelerator provides static anycast IPs and optimizes TCP/UDP routing; CloudFront caches HTTP content","CloudFront is only for video"],"correctAnswer":2,"explanation":"Global Accelerator gives two static anycast IPs and routes any TCP/UDP traffic over the AWS backbone to healthy endpoints — no caching. CloudFront is an HTTP(S) CDN that caches at edges.","category":"Networking","difficulty":"Advanced"},{"id":"q237","text":"What is a target group in an Application Load Balancer?","options":["An Auto Scaling group","A set of registered endpoints (instances, IPs, Lambdas) that receive routed requests with health checks","A group of listeners","A security group for targets"],"correctAnswer":1,"explanation":"Listeners route requests by rule to target groups, which hold the actual targets and their health checks. One ALB can route different paths/hosts to different target groups.","category":"Networking","difficulty":"Intermediate"},{"id":"q238","text":"Which load balancer should you pick for millions of TCP requests per second with a static IP per AZ?","options":["Network Load Balancer","Application Load Balancer","Classic Load Balancer","Gateway Load Balancer"],"correctAnswer":0,"explanation":"NLB operates at layer 4, handles extreme connection rates with ultra-low latency, and provides a static IP (or your Elastic IP) per AZ. ALB is layer 7 without static IPs.","category":"Networking","difficulty":"Intermediate"},{"id":"q239","text":"What is AWS PrivateLink?","options":["A DNS feature","Private connectivity to services via interface VPC endpoints without traversing the internet or peering","A VPN product","A fiber link to AWS"],"correctAnswer":1,"explanation":"PrivateLink exposes a service through an interface endpoint (ENI with private IP) in the consumer's VPC, so traffic to AWS or SaaS services never leaves the AWS network.","category":"Networking","difficulty":"Advanced"},{"id":"q240","text":"What is an egress-only internet gateway used for?","options":["Inbound load balancing","NAT for IPv4","Blocking all outbound traffic","Allowing outbound-only internet access for IPv6 traffic"],"correctAnswer":3,"explanation":"An egress-only IGW lets IPv6 instances initiate outbound connections while preventing unsolicited inbound — the IPv6 equivalent of a NAT gateway's outbound-only behavior.","category":"Networking","difficulty":"Advanced"},{"id":"q241","text":"In Amazon Cognito, what is the difference between user pools and identity pools?","options":["No difference","User pools issue IAM roles directly","User pools handle sign-up/sign-in (authentication); identity pools grant temporary AWS credentials (authorization)","Identity pools store passwords"],"correctAnswer":2,"explanation":"User pools are a user directory issuing JWTs after login. Identity pools exchange those tokens (or other providers') for temporary AWS credentials to call AWS services.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q242","text":"What is the main difference between an IAM user and an IAM role?","options":["Roles cannot have policies","Users are free, roles cost money","Roles are for people only","Users have long-term credentials; roles are assumed temporarily and have no permanent credentials"],"correctAnswer":3,"explanation":"An IAM user has a permanent password/access keys tied to one identity. A role holds permissions that any trusted entity can assume for a session with temporary credentials.","category":"Security & Identity","difficulty":"Beginner"},{"id":"q243","text":"What is the difference between managed and inline IAM policies?","options":["Inline policies are reusable across identities","Managed policies cannot be edited","There is no difference","Managed policies are standalone and attachable to many identities; inline policies are embedded in one identity"],"correctAnswer":3,"explanation":"Managed policies (AWS- or customer-managed) exist independently and can attach to many users/groups/roles. Inline policies live inside a single identity and die with it.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q244","text":"What is the advantage of a KMS customer managed key over an AWS managed key?","options":["It never needs rotation","You control its key policy, rotation schedule, enabling/disabling, and cross-account grants","It encrypts faster","It is free"],"correctAnswer":1,"explanation":"Customer managed keys give full control: custom key policies, grants, cross-account use, and rotation settings. AWS managed keys are created and controlled by the owning service.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q245","text":"What is envelope encryption?","options":["Encrypting emails","Encrypting data with a data key, then encrypting that data key with a master key (KMS)","Encrypting only file headers","Double base64 encoding"],"correctAnswer":1,"explanation":"Data is encrypted locally with a generated data key; the data key itself is encrypted by a KMS key and stored alongside the data. This avoids sending large payloads to KMS.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q246","text":"What does AWS IAM Identity Center (formerly AWS SSO) provide?","options":["Password autofill","Centralized single sign-on to multiple AWS accounts and applications for workforce users","MFA hardware","Root account recovery"],"correctAnswer":1,"explanation":"IAM Identity Center gives workforce users one portal to access many AWS accounts and SAML apps, with permissions managed centrally via permission sets, often synced from an IdP.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q247","text":"What is Amazon Detective used for?","options":["Investigating and visualizing the root cause of security findings using graph analysis","Blocking attacks in real time","Scanning code for bugs","Encrypting logs"],"correctAnswer":0,"explanation":"Detective ingests CloudTrail, VPC Flow Logs, and GuardDuty findings into a behavior graph to help analysts investigate suspicious activity. GuardDuty detects; Detective investigates.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q248","text":"What does S3 Block Public Access do?","options":["Hides bucket names","Encrypts public objects","Blocks all S3 traffic","Provides account- and bucket-level guardrails that override ACLs/policies granting public access"],"correctAnswer":3,"explanation":"Block Public Access settings override any bucket policy or ACL that would make data public, acting as a safety net. It's enabled by default on new buckets.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q249","text":"In IAM policy evaluation, what happens when one policy allows an action and another explicitly denies it?","options":["AWS asks for confirmation","The explicit deny always wins","The allow wins","The most recent policy wins"],"correctAnswer":1,"explanation":"Policy evaluation starts at implicit deny; an explicit Allow grants access, but an explicit Deny in any applicable policy (identity, resource, SCP) overrides all allows.","category":"Security & Identity","difficulty":"Intermediate"},{"id":"q250","text":"What is AWS Firewall Manager?","options":["A local packet filter","A service to centrally configure WAF, Shield, and security group rules across accounts in an organization","A hardware firewall","A VPN manager"],"correctAnswer":1,"explanation":"Firewall Manager applies WAF rules, Shield Advanced protections, security group policies, and Network Firewall rules consistently across all accounts in AWS Organizations.","category":"Security & Identity","difficulty":"Advanced"},{"id":"q251","text":"What is the difference between standard- and high-resolution CloudWatch metrics?","options":["There is no difference","Standard has 1-minute granularity; high-resolution supports down to 1-second","High-resolution is free","Standard metrics are text-based"],"correctAnswer":1,"explanation":"Standard metrics record at 1-minute periods. High-resolution custom metrics can be published at 1-second granularity and alarmed on 10- or 30-second periods.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q252","text":"How do you publish your own application metric to CloudWatch?","options":["Metrics cannot be custom","Call the PutMetricData API (or use the embedded metric format in logs)","Enable detailed monitoring","Edit the CloudWatch console"],"correctAnswer":1,"explanation":"Custom metrics are published with PutMetricData or by writing structured logs in the CloudWatch embedded metric format. Detailed monitoring only changes EC2's built-in metric frequency.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q253","text":"Why is the CloudWatch agent needed to monitor EC2 memory usage?","options":["CloudWatch only supports Windows","Memory metrics are a paid feature","It is not needed","The hypervisor cannot see inside the OS, so memory and disk-space metrics require an in-guest agent"],"correctAnswer":3,"explanation":"EC2's built-in metrics (CPU, network, disk I/O) come from the hypervisor. OS-level data like memory and disk space used must be collected by the CloudWatch agent inside the instance.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q254","text":"What is the difference between CloudTrail management events and data events?","options":["Management events cover control-plane API calls (free); data events cover high-volume object-level operations like S3 GetObject (extra cost)","Management events are only for root","No difference","Data events are logged by default"],"correctAnswer":0,"explanation":"Management (control-plane) events like RunInstances are logged by default. Data events — S3 object access, Lambda Invoke — are high-volume, opt-in, and billed separately.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q255","text":"How does SSM Session Manager improve on a bastion host for shell access?","options":["It only works on Windows","It is faster","It requires a public IP","No open inbound ports, no SSH keys, access via IAM with full session logging"],"correctAnswer":3,"explanation":"Session Manager tunnels shell sessions through the SSM agent, so instances need no inbound SSH ports, no key pairs, and no bastion; access is IAM-controlled and auditable.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q256","text":"What does AWS Systems Manager Patch Manager do?","options":["Patches the AWS console","Repairs corrupted files","Updates Lambda runtimes","Automates OS patching across fleets of instances using patch baselines and maintenance windows"],"correctAnswer":3,"explanation":"Patch Manager scans and installs OS/application patches on managed instances according to patch baselines, typically on a schedule via maintenance windows.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q257","text":"What is the AWS Health Dashboard?","options":["An EC2 health check","A billing summary","A view of AWS service status and events that specifically affect your account and resources","A fitness tracker integration"],"correctAnswer":2,"explanation":"The Health Dashboard shows both general AWS service status and personalized events (scheduled maintenance, issues) affecting your specific resources, with proactive notifications.","category":"Management & Monitoring","difficulty":"Beginner"},{"id":"q258","text":"By default, how long are CloudWatch Logs retained?","options":["1 year","30 days","Indefinitely, until you set a retention policy","24 hours"],"correctAnswer":2,"explanation":"Log groups default to 'Never expire'. You should set a retention period (1 day to 10 years) per log group to control storage costs.","category":"Management & Monitoring","difficulty":"Intermediate"},{"id":"q259","text":"What is AWS CloudShell?","options":["A Lambda runtime","An EC2 instance type","A browser-based shell pre-authenticated with your console credentials and AWS CLI installed","A desktop terminal app"],"correctAnswer":2,"explanation":"CloudShell is a free browser shell launched from the console, already authenticated as you, with the CLI and common tools preinstalled and 1 GB of persistent home storage per region.","category":"Management & Monitoring","difficulty":"Beginner"},{"id":"q260","text":"What is a CloudWatch composite alarm?","options":["An alarm with multiple thresholds","An alarm combining other alarms with AND/OR logic to reduce alert noise","An alarm for multiple regions","A deprecated alarm type"],"correctAnswer":1,"explanation":"Composite alarms take a rule expression over other alarms' states (e.g., CPU alarm AND error alarm) and only alert when the combination is true — cutting alarm fatigue.","category":"Management & Monitoring","difficulty":"Advanced"},{"id":"q261","text":"What is the key difference between Kinesis Data Streams and Data Firehose?","options":["They are the same","Firehose is faster","Streams cannot scale","Streams offers real-time custom consumers with ms latency; Firehose is a fully managed delivery pipeline into S3/Redshift/OpenSearch"],"correctAnswer":3,"explanation":"Data Streams gives you shards and custom consumers for sub-second processing. Firehose is near-real-time (buffered), fully managed, and simply delivers data to destinations.","category":"Analytics","difficulty":"Advanced"},{"id":"q262","text":"What is a shard in Kinesis Data Streams?","options":["The base throughput unit: 1 MB/s in, 2 MB/s out, with ordering per partition key","A consumer group","An encryption block","A backup unit"],"correctAnswer":0,"explanation":"Each shard provides fixed capacity (1 MB/s or 1,000 records/s ingest, 2 MB/s egress) and preserves record order per partition key. You scale a stream by resharding.","category":"Analytics","difficulty":"Advanced"},{"id":"q263","text":"How does partitioning data in S3 reduce Athena query costs?","options":["Partitions are cached","It does not affect cost","It compresses the data","Athena scans only the partitions matching the WHERE clause, and you pay per data scanned"],"correctAnswer":3,"explanation":"Athena bills per TB scanned. Partitioning (e.g., by date) plus columnar formats like Parquet lets queries prune irrelevant data, often cutting scan size by orders of magnitude.","category":"Analytics","difficulty":"Advanced"},{"id":"q264","text":"What does an AWS Glue crawler do?","options":["Indexes web pages","Scans for security threats","Scans data stores, infers schemas, and populates the Glue Data Catalog with table definitions","Moves data between buckets"],"correctAnswer":2,"explanation":"Crawlers connect to sources like S3, sample the data to infer schema and partitions, and create/update Data Catalog tables that Athena, EMR, and Redshift Spectrum can query.","category":"Analytics","difficulty":"Intermediate"},{"id":"q265","text":"What is Redshift Spectrum?","options":["A feature to run Redshift SQL queries directly against data in S3 without loading it","A color scheme","A backup feature","A Redshift monitoring tool"],"correctAnswer":0,"explanation":"Spectrum extends Redshift queries to exabytes of data in S3 via the Glue Data Catalog, joining external S3 tables with local warehouse tables without ETL loading.","category":"Analytics","difficulty":"Advanced"},{"id":"q266","text":"What is Amazon EMR used for?","options":["Email routing","Running big data frameworks like Spark, Hadoop, and Hive on managed clusters","Medical records","Real-time messaging"],"correctAnswer":1,"explanation":"EMR provisions and manages clusters for open-source big data tools (Spark, Hadoop, Hive, Presto), with options for EC2, EKS, or serverless execution.","category":"Analytics","difficulty":"Intermediate"},{"id":"q267","text":"What is Amazon OpenSearch Service commonly used for?","options":["DNS resolution","Full-text search, log analytics, and real-time application monitoring dashboards","Object storage","Container orchestration"],"correctAnswer":1,"explanation":"OpenSearch (successor to the Elasticsearch service) powers full-text search and log analytics, often paired with Kibana-style OpenSearch Dashboards for visualization.","category":"Analytics","difficulty":"Intermediate"},{"id":"q268","text":"What is Amazon MSK?","options":["A machine learning kit","Managed streaming for Apache Kafka","A message queue like SQS","A media streaming CDN"],"correctAnswer":1,"explanation":"MSK runs Apache Kafka clusters (including a serverless option) so existing Kafka applications work unchanged while AWS manages brokers, patching, and high availability.","category":"Analytics","difficulty":"Intermediate"},{"id":"q269","text":"What is SPICE in Amazon QuickSight?","options":["A chart type","QuickSight's in-memory calculation engine that caches datasets for fast dashboards","A data connector","A pricing plan"],"correctAnswer":1,"explanation":"SPICE (Super-fast, Parallel, In-memory Calculation Engine) imports datasets into memory so dashboards query quickly without repeatedly hitting the source database.","category":"Analytics","difficulty":"Intermediate"},{"id":"q270","text":"What is the difference between a data lake and a data warehouse?","options":["A data lake is smaller","A data lake stores raw data in any format (e.g., S3); a warehouse stores structured, schema-defined data optimized for SQL analytics (e.g., Redshift)","Warehouses cannot be queried","They are synonyms"],"correctAnswer":1,"explanation":"Lakes hold raw, heterogeneous data cheaply with schema-on-read. Warehouses hold curated, structured data with schema-on-write for fast BI queries. Many architectures use both.","category":"Analytics","difficulty":"Beginner"},{"id":"q271","text":"What does an SQS FIFO queue guarantee that a standard queue does not?","options":["Exactly-once processing and strict message ordering within a message group","Lower cost","Larger messages","Higher throughput"],"correctAnswer":0,"explanation":"FIFO queues preserve order per message group and deduplicate messages (exactly-once). Standard queues offer nearly unlimited throughput but at-least-once, best-effort ordering.","category":"Integration","difficulty":"Intermediate"},{"id":"q272","text":"In SQS, what is the visibility timeout?","options":["The queue creation delay","The API response timeout","How long a message lives in the queue","The period a received message is hidden from other consumers while being processed"],"correctAnswer":3,"explanation":"After a consumer receives a message, it stays invisible for the visibility timeout. If not deleted in time, it reappears for redelivery — so set it longer than processing time.","category":"Integration","difficulty":"Advanced"},{"id":"q273","text":"Why use long polling with SQS?","options":["It increases message size","It encrypts messages","It waits up to 20s for messages, reducing empty responses and API cost versus short polling","It reorders messages"],"correctAnswer":2,"explanation":"Long polling (WaitTimeSeconds up to 20) lets ReceiveMessage wait for messages to arrive, cutting empty receives and cost while lowering latency compared with tight short-poll loops.","category":"Integration","difficulty":"Intermediate"},{"id":"q274","text":"What is a dead-letter queue (DLQ)?","options":["A deleted queue","An encrypted queue","A queue with no consumers","A queue that receives messages that failed processing too many times, for isolation and debugging"],"correctAnswer":3,"explanation":"After a message exceeds its maxReceiveCount without successful processing, SQS moves it to the DLQ so poison messages don't block the main queue and can be inspected.","category":"Integration","difficulty":"Intermediate"},{"id":"q275","text":"What is the SNS fan-out pattern?","options":["Spreading SNS across regions","Rotating SNS topics","Splitting large messages","Publishing one message to a topic that delivers to many subscribers (e.g., multiple SQS queues) in parallel"],"correctAnswer":3,"explanation":"Fan-out publishes once to an SNS topic subscribed by multiple SQS queues/Lambdas, letting several systems process the same event independently and asynchronously.","category":"Integration","difficulty":"Intermediate"},{"id":"q276","text":"Which is generally true of API Gateway HTTP APIs versus REST APIs?","options":["HTTP APIs cost more","HTTP APIs are cheaper and lower-latency but offer fewer features (no usage plans, API keys, or request validation)","REST APIs are deprecated","They are identical"],"correctAnswer":1,"explanation":"HTTP APIs are up to ~70% cheaper with lower latency, supporting JWT authorizers and CORS. REST APIs add usage plans, API keys, caching, and request/response transformation.","category":"Integration","difficulty":"Advanced"},{"id":"q277","text":"When should you choose Step Functions Express workflows over Standard?","options":["For workflows lasting up to a year","When you need exactly-once execution","For high-volume, short-duration (under 5 minutes) event processing at lower cost","For human approval steps"],"correctAnswer":2,"explanation":"Express workflows handle very high event rates for up to 5 minutes with at-least-once semantics and per-request pricing. Standard supports year-long, exactly-once workflows.","category":"Integration","difficulty":"Advanced"},{"id":"q278","text":"What are EventBridge Pipes?","options":["Network tunnels","VPC connections","Point-to-point integrations connecting a source to a target with optional filtering and enrichment steps","Log pipelines"],"correctAnswer":2,"explanation":"Pipes connect one source (e.g., SQS, DynamoDB Streams, Kinesis) to one target, with built-in filtering and an optional enrichment step — reducing custom glue code.","category":"Integration","difficulty":"Advanced"},{"id":"q279","text":"What does SNS message filtering allow?","options":["Encrypting selected messages","Subscribers receive only messages whose attributes match their filter policy","Compressing messages","Blocking spam"],"correctAnswer":1,"explanation":"A filter policy on a subscription matches message attributes (or body), so each subscriber gets only relevant messages instead of filtering client-side.","category":"Integration","difficulty":"Intermediate"},{"id":"q280","text":"When is Amazon MQ a better choice than SQS/SNS?","options":["When you need unlimited scale","For all new applications","When migrating apps that already use standard protocols like AMQP, MQTT, or JMS on ActiveMQ/RabbitMQ","Never"],"correctAnswer":2,"explanation":"Amazon MQ is managed ActiveMQ/RabbitMQ, ideal for lift-and-shift of apps using standard messaging protocols. Greenfield cloud apps should prefer SQS/SNS for scale and simplicity.","category":"Integration","difficulty":"Beginner"},{"id":"q281","text":"What is Amazon ECR?","options":["A container runtime","A code editor","A fully managed container image registry integrated with ECS, EKS, and Lambda","A CI server"],"correctAnswer":2,"explanation":"Elastic Container Registry stores, scans, and serves container images with IAM-based access control, replication, and vulnerability scanning, feeding ECS/EKS/Lambda deployments.","category":"Developer Tools","difficulty":"Beginner"},{"id":"q282","text":"What is AWS CodeCommit?","options":["A build system","A deployment tool","A code review AI","A managed private Git repository service"],"correctAnswer":3,"explanation":"CodeCommit hosts private Git repositories with IAM access control and encryption. (AWS has since steered new customers toward GitHub/GitLab integrations, but it remains exam-relevant.)","category":"Developer Tools","difficulty":"Beginner"},{"id":"q283","text":"How does the AWS CDK differ from writing raw CloudFormation?","options":["CDK is YAML only","CDK cannot create VPCs","CDK bypasses CloudFormation","CDK lets you define infrastructure in TypeScript/Python/etc., which synthesizes to CloudFormation templates"],"correctAnswer":3,"explanation":"The Cloud Development Kit uses real programming languages with reusable constructs, loops, and logic; `cdk synth` produces CloudFormation templates that are then deployed.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q284","text":"What is AWS X-Ray used for?","options":["Tracing requests end-to-end across distributed services to find latency bottlenecks and errors","Inspecting network packets","Scanning images for malware","Viewing S3 file contents"],"correctAnswer":0,"explanation":"X-Ray collects trace segments from instrumented services (Lambda, API Gateway, SDK calls) and renders a service map showing latency and error hot spots per request path.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q285","text":"Which CodeDeploy configuration shifts 10% of Lambda traffic, waits, then shifts the rest?","options":["BlueGreenInstant","AllAtOnce","Canary (e.g., Canary10Percent5Minutes)","Rolling"],"correctAnswer":2,"explanation":"Canary configurations shift a small percentage first, monitor alarms, then shift the remainder. Linear configurations shift in equal increments; AllAtOnce shifts immediately.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q286","text":"Which Elastic Beanstalk deployment policy deploys to fresh instances and swaps only if healthy, at the cost of double capacity temporarily?","options":["Immutable","Rolling","All at once","Rolling with additional batch"],"correctAnswer":0,"explanation":"Immutable deployments launch a parallel set of new instances, verify health, then swap them in — safest rollback story but temporarily doubles instance count.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q287","text":"What is AWS Amplify?","options":["An audio service","A framework and hosting platform for building full-stack web and mobile apps quickly on AWS","A load amplifier","A database engine"],"correctAnswer":1,"explanation":"Amplify provides libraries, CLI, CI/CD hosting, and backend provisioning (auth, APIs, storage) so front-end developers can ship full-stack apps without deep AWS plumbing.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q288","text":"What is AWS Cloud9?","options":["Nine linked data centers","A cloud-based IDE that runs in the browser with a preconfigured terminal and AWS credentials","A code scanner","A container platform"],"correctAnswer":1,"explanation":"Cloud9 is a browser IDE backed by an EC2 instance, preloaded with SDKs and CLI — handy for pair programming and developing where AWS access is already wired up.","category":"Developer Tools","difficulty":"Beginner"},{"id":"q289","text":"What is AWS CodeArtifact?","options":["A container registry","A managed artifact repository for packages (npm, PyPI, Maven, NuGet) with upstream proxying","A model registry","A build log archive"],"correctAnswer":1,"explanation":"CodeArtifact stores and shares software packages across teams, proxying public registries and enforcing access control — the package-manager counterpart to ECR's images.","category":"Developer Tools","difficulty":"Intermediate"},{"id":"q290","text":"What does Amazon CodeGuru provide?","options":["IDE themes","Free developer training","A Git hosting service","ML-powered code reviews (Reviewer) and runtime performance profiling (Profiler)"],"correctAnswer":3,"explanation":"CodeGuru Reviewer flags defects and best-practice issues in pull requests using ML; CodeGuru Profiler analyzes running applications to find expensive code paths.","category":"Developer Tools","difficulty":"Advanced"},{"id":"q291","text":"Which pillar was added to the AWS Well-Architected Framework as its sixth pillar?","options":["Serverless","Simplicity","Sustainability","Scalability"],"correctAnswer":2,"explanation":"Sustainability joined Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization in 2021, focusing on minimizing environmental impact.","category":"Other","difficulty":"Intermediate"},{"id":"q292","text":"What are AWS edge locations?","options":["Sites where CloudFront and Route 53 cache/serve content close to users — far more numerous than regions","Small AWS offices","IoT device locations","Backup data centers"],"correctAnswer":0,"explanation":"Edge locations are points of presence in hundreds of cities used by CloudFront, Route 53, and Global Accelerator to serve users with low latency; they are not full regions or AZs.","category":"Other","difficulty":"Beginner"},{"id":"q293","text":"What are AWS Local Zones?","options":["Infrastructure extensions placing compute/storage in metro areas for single-digit-millisecond latency","Private data centers","Time zone settings","DNS zones"],"correctAnswer":0,"explanation":"Local Zones extend a parent region into large metros so latency-sensitive workloads (gaming, media, ML inference) run closer to end users while using the same APIs.","category":"Other","difficulty":"Advanced"},{"id":"q294","text":"Besides one bill, what cost benefit does consolidated billing in AWS Organizations provide?","options":["Free support","Usage across accounts is aggregated, so volume-tier discounts and RI/Savings Plans sharing apply organization-wide","50% flat discount","No benefit"],"correctAnswer":1,"explanation":"Consolidated billing pools usage for volume pricing tiers, and unused Reserved Instances/Savings Plans discounts automatically apply to matching usage in other accounts.","category":"Other","difficulty":"Intermediate"},{"id":"q295","text":"What is the AWS Pricing Calculator for?","options":["Comparing AWS to competitors","Viewing last month's bill","Estimating the monthly cost of planned AWS architectures before deploying","Calculating taxes"],"correctAnswer":2,"explanation":"The Pricing Calculator builds cost estimates for planned workloads service-by-service. Historical spend analysis is Cost Explorer's job.","category":"Other","difficulty":"Beginner"},{"id":"q296","text":"What does TCO (Total Cost of Ownership) compare in cloud migration discussions?","options":["The full cost of on-premises infrastructure (hardware, power, staff) versus running in the cloud","Support plan prices","Spot versus On-Demand","Two AWS regions"],"correctAnswer":0,"explanation":"TCO analysis counts all direct and indirect on-prem costs — servers, facilities, power, cooling, admin labor — against cloud costs to justify migration decisions.","category":"Other","difficulty":"Beginner"},{"id":"q297","text":"What is the AWS Snow family used for?","options":["Cooling data centers","Backup software","Winter-only discounts","Physical devices for migrating large datasets offline and edge computing in disconnected environments"],"correctAnswer":3,"explanation":"Snowcone and Snowball Edge are rugged devices for petabyte-scale offline data transfer and edge compute where bandwidth is limited; data ships to AWS for import into S3.","category":"Other","difficulty":"Intermediate"},{"id":"q298","text":"What is AWS Outposts?","options":["An edge CDN","A hybrid VPN","AWS-managed racks that run AWS services on-premises for low-latency or data-residency needs","Remote AWS offices"],"correctAnswer":2,"explanation":"Outposts brings native AWS infrastructure, APIs, and services into your own data center, managed by AWS — for workloads that must stay on-premises but want AWS tooling.","category":"Other","difficulty":"Advanced"},{"id":"q299","text":"What is the AWS Marketplace?","options":["An AWS merchandise store","A job board","A curated catalog to find, buy, and deploy third-party software and AMIs billed through AWS","An internal AWS tool"],"correctAnswer":2,"explanation":"The Marketplace sells third-party software (AMIs, SaaS, containers) with consolidated AWS billing and often pay-as-you-go pricing.","category":"Other","difficulty":"Beginner"},{"id":"q300","text":"What does AWS Cost Anomaly Detection do?","options":["Uses machine learning to spot unusual spending patterns and alert you with root-cause hints","Blocks expensive services","Caps your bill automatically","Deletes unused resources"],"correctAnswer":0,"explanation":"Cost Anomaly Detection learns your spend patterns per service/account and sends alerts when spending deviates abnormally — catching surprises budgets might miss.","category":"Other","difficulty":"Intermediate"}]};
 const DIFFS = ["Beginner", "Intermediate", "Advanced"];
+const CAT_EMOJI = {
+  "Compute": "🖥️", "Storage": "🗄️", "Database": "💾", "Networking": "🌐",
+  "Security & Identity": "🔐", "Management & Monitoring": "📊", "Analytics": "📈",
+  "Integration": "🔗", "Developer Tools": "🛠️", "Other": "☁️",
+};
+const LEVELS = ["Newcomer", "Cloud Learner", "Builder", "Architect", "SysOps Pro", "Security Guru", "Serverless Ninja", "Cloud Master"];
 const $app = document.getElementById("app");
 
-/* ---------- persistence (mirrors SwiftData models) ---------- */
+/* ---------- persistence (keys unchanged so existing progress carries over) ---------- */
 const store = {
   get sessions() { try { return JSON.parse(localStorage.getItem("aqm.sessions") || "[]"); } catch { return []; } },
   set sessions(v) { localStorage.setItem("aqm.sessions", JSON.stringify(v)); },
   get missed() { try { return JSON.parse(localStorage.getItem("aqm.missed") || "{}"); } catch { return {}; } },
   set missed(v) { localStorage.setItem("aqm.missed", JSON.stringify(v)); },
+  get qstats() { try { return JSON.parse(localStorage.getItem("aqm.qstats") || "{}"); } catch { return {}; } },
+  set qstats(v) { localStorage.setItem("aqm.qstats", JSON.stringify(v)); },
 };
 
 function stats() {
@@ -230,7 +303,17 @@ function stats() {
       }
     }
   }
-  return { attempted, accuracy: attempted ? correct / attempted : 0, streak };
+  const level = Math.min(Math.floor(correct / 25), LEVELS.length - 1);
+  const nextAt = (level + 1) * 25;
+  return { attempted, correct, accuracy: attempted ? correct / attempted : 0, streak, level, nextAt };
+}
+
+function categoryMastery(cat) {
+  const qs = BANK.questions.filter(q => q.category === cat);
+  const st = store.qstats;
+  let seen = 0, right = 0;
+  for (const q of qs) { const r = st[q.id]; if (r) { seen++; if (r.c > 0) right++; } }
+  return { total: qs.length, seen, right, pct: qs.length ? right / qs.length : 0 };
 }
 
 /* ---------- helpers ---------- */
@@ -243,67 +326,157 @@ const shuffleOptions = q => {
 };
 const scoreColor = r => r >= .7 ? "var(--green)" : r >= .4 ? "var(--orange)" : "var(--red)";
 const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function frame(title, backLabel, onBack, contentHTML, footHTML) {
+/* haptics: Android web vibrates; iOS Safari ignores (no-op) */
+const buzz = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+const hTap = () => buzz(10), hGood = () => buzz([12, 40, 24]), hBad = () => buzz([50, 40, 50]), hTick = () => buzz(6);
+
+/* ---------- tiny router (Android back button + swipe-back friendly) ---------- */
+let navigating = false;
+function go(screen, render, replace) {
+  if (replace) history.replaceState({ screen }, "");
+  else history.pushState({ screen }, "");
+  render();
+}
+window.addEventListener("popstate", e => {
+  const s = (e.state && e.state.screen) || "home";
+  navigating = true;
+  if (s === "quiz" && quiz) renderQuiz();
+  else if (s === "results" && lastOutcome) renderResults(lastOutcome);
+  else if (s === "review" && lastOutcome) renderReview(lastOutcome, 0);
+  else if (s === "cats") renderCategories();
+  else if (s === "stats") renderStats();
+  else renderHome();
+  navigating = false;
+});
+const back = () => history.back();
+
+/* ---------- frame ---------- */
+function frame(opts, contentHTML, footHTML) {
+  const { title = "", backLabel = null, right = "" } = opts;
   $app.innerHTML = `
-    <div class="nav">${onBack ? `<button class="back" id="backBtn">&#8249; ${esc(backLabel)}</button>` : ""}<span class="title">${esc(title)}</span></div>
-    <div class="content">${contentHTML}</div>${footHTML ? `<div class="quiz-foot">${footHTML}</div>` : ""}`;
-  if (onBack) document.getElementById("backBtn").onclick = onBack;
+    <div class="hdr">
+      <div class="side">${backLabel !== null ? `<button class="hbtn" id="backBtn">&#8249; ${esc(backLabel)}</button>` : ""}</div>
+      <span class="ttl">${esc(title)}</span>
+      <div class="side r">${right}</div>
+    </div>
+    <div class="content"><div class="enter">${contentHTML}${footHTML ? `<div class="footbar">${footHTML}</div>` : ""}</div>`;
+  if (backLabel !== null) document.getElementById("backBtn").onclick = () => { hTap(); back(); };
+}
+const themeBtnHTML = () => `<button class="icbtn" id="themeToggle" aria-label="Toggle theme">${effectiveTheme() === "dark" ? "☀️" : "🌙"}</button>`;
+function wireTheme() {
+  const b = document.getElementById("themeToggle");
+  if (b) b.onclick = () => { hTap(); toggleTheme(); };
 }
 
 /* ---------- home ---------- */
-function showHome() {
+function renderHome() {
   const st = stats();
   const missedCount = Object.keys(store.missed).length;
   const recent = store.sessions.slice(-5).reverse();
-  frame("", null, null, `
-    <div class="home-head"><div class="cloud">&#9729;&#65039;</div><h2>AWS Quiz Master</h2>
-      <p>Cloud Practitioner &rarr; Developer Associate</p></div>
-    <div class="stats">
-      <div class="col"><div class="num">${st.attempted}</div><div class="lbl">Attempted</div></div>
-      <div class="col"><div class="num">${Math.round(st.accuracy * 100)}%</div><div class="lbl">Accuracy</div></div>
-      <div class="col"><div class="num"><span class="flame">&#128293;</span> ${st.streak}</div><div class="lbl">Day Streak</div></div>
+  const toNext = st.nextAt - st.correct;
+  frame({ title: "", right: themeBtnHTML() }, `
+    <div class="hero">
+      <div class="row1">
+        <span class="cloud">☁️</span>
+        <div>
+          <h1>AWS Quiz Master</h1>
+          <p class="sub">Cloud Practitioner → Developer Associate</p>
+        </div>
+        <div class="lvl">
+          <span class="badge">Lv ${st.level + 1} · ${LEVELS[st.level]}</span>
+          <span class="xp">${st.level + 1 < LEVELS.length ? `${toNext} correct to next level` : "Max level!"}</span>
+        </div>
+      </div>
+      <div class="trio">
+        <div class="c"><div class="v">${st.attempted}</div><div class="k">Answered</div></div>
+        <div class="c"><div class="v">${Math.round(st.accuracy * 100)}%</div><div class="k">Accuracy</div></div>
+        <div class="c"><div class="v">🔥 ${st.streak}</div><div class="k">Day streak</div></div>
+      </div>
     </div>
+    <div id="installSlot"></div>
+    <div class="sect">Play</div>
     <div class="stack">
-      <button class="btn-primary" id="goQuiz">&#9654;&#65038; Start Quiz</button>
-      <button class="btn-primary" id="goPractice">&#8635; Practice Mode</button>
-      <button class="btn-primary" id="goCats">&#9638; Browse Categories</button>
-      ${missedCount ? `<div class="hint">${missedCount} question${missedCount === 1 ? "" : "s"} waiting in Practice Mode</div>` : ""}
+      <button class="btn" id="goQuiz">▶︎&nbsp; Start Quiz</button>
+      <button class="btn ghost" id="goPractice">↻&nbsp; Practice Mode${missedCount ? ` &nbsp;·&nbsp; ${missedCount} waiting` : ""}</button>
+      <button class="btn ghost" id="goCats">▦&nbsp; Browse Categories</button>
+      <button class="btn ghost" id="goStats">📊&nbsp; My Progress</button>
     </div>
-    <div class="recent"><h3>Recent Quizzes</h3>
-      ${recent.length ? recent.map(s => `
-        <div class="card row">
-          <div><div class="name">${esc(s.category)}</div>
-            <div class="meta">${esc(s.difficulty)} &middot; ${new Date(s.date).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</div></div>
-          <div class="score" style="color:${scoreColor(s.total ? s.score / s.total : 0)}">${s.score}/${s.total}</div>
-        </div>`).join("") : `<div class="empty-note">No quizzes yet — start one above!</div>`}
-    </div>`);
-  document.getElementById("goQuiz").onclick = () => startQuiz({ mode: "standard", category: null, difficulty: null, count: 10 });
-  document.getElementById("goPractice").onclick = () => startQuiz({ mode: "practice", count: 20 });
-  document.getElementById("goCats").onclick = showCategories;
+    ${recent.length ? `<div class="sect">Recent quizzes</div>
+      <div class="stack">${recent.map(s => {
+        const r = s.total ? s.score / s.total : 0;
+        return `<div class="card rowitem">
+          <div class="grow"><div class="t">${esc(s.category)}</div>
+          <div class="s">${esc(s.difficulty)} · ${new Date(s.date).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</div></div>
+          <span class="score-pill" style="color:${scoreColor(r)}">${s.score}/${s.total}</span>
+        </div>`;
+      }).join("")}</div>` : `<div class="sect">Get started</div>
+      <div class="card" style="text-align:center;padding:26px 18px">
+        <div style="font-size:34px">🎯</div>
+        <div style="font-weight:750;margin:8px 0 4px">300 questions. Zero cost. Fully offline.</div>
+        <div class="hint">Take your first quiz and start your streak.</div>
+      </div>`}
+  `);
+  wireTheme();
+  renderInstallSlot();
+  document.getElementById("goQuiz").onclick = () => { hTap(); startQuiz({ mode: "standard", category: null, difficulty: null, count: 10 }); };
+  document.getElementById("goPractice").onclick = () => { hTap(); startQuiz({ mode: "practice", count: 20 }); };
+  document.getElementById("goCats").onclick = () => { hTap(); go("cats", renderCategories); };
+  document.getElementById("goStats").onclick = () => { hTap(); go("stats", renderStats); };
+}
+
+/* ---------- install prompt (Android native prompt / iOS hint) ---------- */
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredPrompt = e; renderInstallSlot(); });
+const isStandalone = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+function renderInstallSlot() {
+  const slot = document.getElementById("installSlot");
+  if (!slot || isStandalone()) return;
+  if (deferredPrompt) {
+    slot.innerHTML = `<div class="banner" style="margin-top:14px"><span style="font-size:20px">📲</span>
+      <span><b>Install AWS Quiz Master</b><br>Get it on your home screen — works fully offline.</span>
+      <button class="hbtn" id="doInstall" style="flex-shrink:0">Install</button></div>`;
+    document.getElementById("doInstall").onclick = async () => {
+      hTap(); deferredPrompt.prompt();
+      await deferredPrompt.userChoice; deferredPrompt = null; renderInstallSlot();
+    };
+  } else if (isIOS() && !localStorage.getItem("aqm.hideios")) {
+    slot.innerHTML = `<div class="banner" style="margin-top:14px"><span style="font-size:20px">📲</span>
+      <span><b>Install on your iPhone</b><br>Tap <b>Share</b> <span style="opacity:.7">(the square with ↑)</span> then <b>Add to Home Screen</b>.</span>
+      <button class="x" id="hideIos" aria-label="Dismiss">✕</button></div>`;
+    document.getElementById("hideIos").onclick = () => { localStorage.setItem("aqm.hideios", "1"); slot.innerHTML = ""; };
+  } else slot.innerHTML = "";
 }
 
 /* ---------- categories ---------- */
 let selDiff = "Beginner";
-function showCategories() {
-  frame("Choose a Topic", "Home", showHome, `
-    <div class="sect">Difficulty</div>
+function renderCategories() {
+  frame({ title: "Choose a Topic", backLabel: "Home", right: themeBtnHTML() }, `
+    <div class="sect" style="margin-top:8px">Difficulty</div>
     <div class="seg">${DIFFS.map(d => `<button data-d="${d}" class="${d === selDiff ? "on" : ""}">${d}</button>`).join("")}</div>
     <div class="sect">Category</div>
-    <div id="catList"></div>`);
-  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => { selDiff = b.dataset.d; showCategories(); });
-  document.getElementById("catList").innerHTML = BANK.categories.map((c, i) => {
-    const n = pool(c, selDiff).length;
-    return `<button class="cat card" data-i="${i}" ${n ? "" : "disabled"}>
-      <span><span class="name">${esc(c)}</span><br><span class="count">${n} question${n === 1 ? "" : "s"}</span></span>
-      <span class="chev">&#8250;</span></button>`;
-  }).join("");
+    <div class="catgrid">${BANK.categories.map((c, i) => {
+      const n = pool(c, selDiff).length;
+      const m = categoryMastery(c);
+      return `<button class="cat" data-i="${i}" ${n ? "" : "disabled"}>
+        <span class="emo">${CAT_EMOJI[c] || "☁️"}</span>
+        <span style="flex:1;min-width:0">
+          <span class="nm">${esc(c)}</span>
+          <div class="ct">${n} question${n === 1 ? "" : "s"} · ${Math.round(m.pct * 100)}% mastered</div>
+          <div class="mast"><i style="width:${Math.round(m.pct * 100)}%"></i></div>
+        </span>
+      </button>`;
+    }).join("")}</div>`);
+  wireTheme();
+  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => { hTap(); selDiff = b.dataset.d; renderCategories(); history.replaceState({ screen: "cats" }, ""); });
   document.querySelectorAll(".cat:not([disabled])").forEach(b =>
-    b.onclick = () => startQuiz({ mode: "standard", category: BANK.categories[+b.dataset.i], difficulty: selDiff, count: 10 }));
+    b.onclick = () => { hTap(); startQuiz({ mode: "standard", category: BANK.categories[+b.dataset.i], difficulty: selDiff, count: 10 }); });
 }
 
 /* ---------- quiz ---------- */
-let quiz = null;
+let quiz = null, lastOutcome = null;
 function startQuiz(config) {
   let qs;
   if (config.mode === "practice") {
@@ -314,58 +487,64 @@ function startQuiz(config) {
   }
   qs = shuffle(qs).slice(0, config.count).map(shuffleOptions);
   if (!qs.length) {
-    frame(config.mode === "practice" ? "Practice" : "Quiz", "Home", showHome, `
-      <div class="unavailable"><div class="ico">&#10003;</div><h3>Nothing to Practice</h3>
+    go("quiz", () => {
+      frame({ title: config.mode === "practice" ? "Practice" : "Quiz", backLabel: "Home" }, `
+        <div class="empty"><div class="ico">🎉</div><h3>Nothing to practice</h3>
         <p>${config.mode === "practice"
-          ? "You have no missed questions. Take a quiz and any wrong answers will show up here."
+          ? "You have no missed questions right now. Take a quiz and any wrong answers will collect here."
           : "No questions match this category and difficulty yet."}</p>
-        <button class="btn-primary" id="uHome">Back to Home</button></div>`);
-    document.getElementById("uHome").onclick = showHome;
+        <button class="btn" id="uHome">Back to Home</button></div>`);
+      document.getElementById("uHome").onclick = () => { hTap(); back(); };
+    });
     return;
   }
   quiz = { config, qs, i: 0, picked: null, answers: [], started: Date.now() };
-  renderQuiz();
+  go("quiz", renderQuiz);
 }
 
 function renderQuiz() {
   const { config, qs, i, picked } = quiz;
   const q = qs[i];
-  const title = config.mode === "practice" ? "Practice" : (config.category || "All Categories");
+  const title = config.mode === "practice" ? "Practice" : (config.category || "Quick Quiz");
   const answered = picked !== null;
-  frame(title, "Home", showHome, `
+  frame({ title, backLabel: "Exit" }, `
     <div class="track"><div class="fill" id="fill"></div></div>
-    <div class="qmeta">Question ${i + 1} of ${qs.length}</div>
-    <div class="fadeq">
-      <div class="qtext">${esc(q.text)}</div>
-      <div class="answers">${q.options.map((o, k) => {
-        let cls = "ans", mark = "";
-        if (answered) {
-          cls += " locked";
-          if (k === q.correctAnswer) { cls += " correct"; mark = "&#10003;"; }
-          else if (k === picked) { cls += " wrong"; mark = "&#10005;"; }
-          else cls += " dim";
-        }
-        return `<button class="${cls}" data-k="${k}"><span>${esc(o)}</span><span class="mark">${mark}</span></button>`;
-      }).join("")}</div>
-      <div class="explain card ${answered ? "" : ""}" id="explain" ${answered ? "" : 'style="display:none"'}>
-        <div class="tag">&#128161; Explanation</div><div class="body">${esc(q.explanation)}</div>
-      </div>
+    <div class="qmeta"><span>Question ${i + 1} of ${qs.length}</span><span class="dchip">${esc(q.difficulty)}</span></div>
+    <div class="qtext">${esc(q.text)}</div>
+    <div class="answers">${q.options.map((o, k) => {
+      let cls = "ans", mark = "";
+      if (answered) {
+        cls += " locked";
+        if (k === q.correctAnswer) { cls += " correct"; mark = "✓"; }
+        else if (k === picked) { cls += " wrong"; mark = "✕"; }
+        else cls += " dim";
+      }
+      return `<button class="${cls}" data-k="${k}"><span>${esc(o)}</span><span class="mark">${mark}</span></button>`;
+    }).join("")}</div>
+    <div class="explain card" id="explain" ${answered ? "" : 'style="display:none"'}>
+      <div class="tag">💡 Explanation</div><div class="body">${esc(q.explanation)}</div>
     </div>`,
-    answered ? `<button class="btn-primary" id="nextBtn">${i === qs.length - 1 ? "&#127937; See Results" : "Next &rarr;"}</button>` : "");
+    answered ? `<button class="btn" id="nextBtn">${i === qs.length - 1 ? "🏁 See Results" : "Next →"}</button>` : "");
   setTimeout(() => {
     const fill = document.getElementById("fill"), ex = document.getElementById("explain");
     if (fill) fill.style.width = (quiz.answers.length / qs.length * 100) + "%";
     if (answered && ex) ex.classList.add("show");
   }, 30);
   if (!answered) document.querySelectorAll(".ans").forEach(b => b.onclick = () => pick(+b.dataset.k));
-  else document.getElementById("nextBtn").onclick = advance;
+  else document.getElementById("nextBtn").onclick = () => { hTap(); advance(); };
 }
 
 function pick(k) {
-  if (quiz.picked !== null) return;
+  if (!quiz || quiz.picked !== null) return;
   quiz.picked = k;
-  quiz.answers.push({ q: quiz.qs[quiz.i], picked: k });
+  const q = quiz.qs[quiz.i];
+  quiz.answers.push({ q, picked: k });
+  (k === q.correctAnswer) ? hGood() : hBad();
   renderQuiz();
+  // per-question mastery tally
+  const qs2 = store.qstats, r = qs2[q.id] || { s: 0, c: 0 };
+  r.s++; if (k === q.correctAnswer) r.c++; else r.c = 0;
+  qs2[q.id] = r; store.qstats = qs2;
 }
 
 function advance() {
@@ -378,7 +557,7 @@ function finishQuiz() {
   const { config, answers, started } = quiz;
   const score = answers.filter(a => a.picked === a.q.correctAnswer).length;
   const outcome = {
-    category: config.mode === "practice" ? "Practice" : (config.category || "All Categories"),
+    category: config.mode === "practice" ? "Practice" : (config.category || "Quick Quiz"),
     difficulty: config.difficulty || "Mixed",
     score, total: answers.length,
     timeSpent: Math.round((Date.now() - started) / 1000),
@@ -391,95 +570,162 @@ function finishQuiz() {
     else missed[a.q.id] = (missed[a.q.id] || 0) + 1;
   }
   store.missed = missed;
-  showResults(outcome);
+  lastOutcome = outcome; quiz = null;
+  go("results", () => renderResults(outcome));
 }
 
 /* ---------- results ---------- */
-function showResults(o) {
+function renderResults(o) {
   const r = o.total ? o.score / o.total : 0;
-  const head = r >= .9 ? "Outstanding! &#127942;" : r >= .7 ? "Great job! &#127881;" : r >= .5 ? "Good effort! &#128170;" : "Keep practicing! &#128218;";
-  frame("Results", null, null, `
+  const head = r >= .9 ? "Outstanding! 🏆" : r >= .7 ? "Great job! 🎉" : r >= .5 ? "Good effort! 💪" : "Keep practicing! 📚";
+  frame({ title: "Results" }, `
     <div class="res">
-      <div class="head">${head}</div>
-      <div class="big"><span id="cnt">0</span>/${o.total}</div>
+      <div class="headline">${head}</div>
+      <div class="big"><span id="cnt">0</span><span style="opacity:.35">/${o.total}</span></div>
       <div class="acc" id="acc" style="color:${scoreColor(r)}">0% accuracy</div>
       <div class="chips">
-        <span class="chip2">&#128193; ${esc(o.category)}</span>
-        <span class="chip2">&#128337; ${fmtTime(o.timeSpent)}</span>
+        <span class="chip2">📁 ${esc(o.category)}</span>
+        <span class="chip2">⏱ ${fmtTime(o.timeSpent)}</span>
+        <span class="chip2">🎚 ${esc(o.difficulty)}</span>
       </div>
       <div class="stack">
-        <button class="btn-primary" id="rReview">&#128203; Review Answers</button>
-        <button class="btn-primary" id="rAgain">&#8635; Try Again</button>
-        <button class="btn-primary" id="rHome">&#8962; Home</button>
+        <button class="btn" id="rReview">📋&nbsp; Review Answers</button>
+        <button class="btn ghost" id="rAgain">↻&nbsp; Try Again</button>
+        ${navigator.share ? `<button class="btn ghost" id="rShare">📤&nbsp; Share Score</button>` : ""}
+        <button class="btn subtle" id="rHome">⌂&nbsp; Home</button>
       </div>
     </div>`);
+  // rAF count-up (smooth at any frame rate)
   const cnt = document.getElementById("cnt"), acc = document.getElementById("acc");
-  let n = 0;
-  if (o.score > 0) {
-    const step = 800 / o.score;
-    const t = setInterval(() => {
-      n++; cnt.textContent = n;
-      acc.textContent = Math.round(n / o.total * 100) + "% accuracy";
-      if (n >= o.score) clearInterval(t);
-    }, step);
-  }
-  document.getElementById("rReview").onclick = () => showReview(o, 0);
-  document.getElementById("rAgain").onclick = () => startQuiz(o.config);
-  document.getElementById("rHome").onclick = showHome;
+  if (o.score > 0 && !reduceMotion()) {
+    const t0 = performance.now(), dur = 800; let last = 0;
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1);
+      const n = Math.round(p * o.score);
+      if (n !== last) { last = n; cnt.textContent = n; acc.textContent = Math.round(n / o.total * 100) + "% accuracy"; hTick(); }
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    setTimeout(() => { cnt.textContent = o.score; acc.textContent = Math.round(r * 100) + "% accuracy"; }, 900);
+  } else { cnt.textContent = o.score; acc.textContent = Math.round(r * 100) + "% accuracy"; }
+  if (r >= .7) confetti();
+  document.getElementById("rReview").onclick = () => { hTap(); go("review", () => renderReview(o, 0)); };
+  document.getElementById("rAgain").onclick = () => { hTap(); startQuiz(o.config); };
+  const sh = document.getElementById("rShare");
+  if (sh) sh.onclick = () => { hTap(); navigator.share({
+    title: "AWS Quiz Master",
+    text: `I scored ${o.score}/${o.total} (${Math.round(r * 100)}%) on ${o.category} in AWS Quiz Master! ☁️`,
+    url: location.href,
+  }).catch(() => {}); };
+  document.getElementById("rHome").onclick = () => { hTap(); go("home", renderHome); };
+}
+
+/* confetti: transform-only canvas burst, auto-cleans */
+function confetti() {
+  if (reduceMotion()) return;
+  const cv = document.getElementById("confetti"), ctx = cv.getContext("2d");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.scale(dpr, dpr);
+  const colors = ["#ff9900", "#e47911", "#23a047", "#ffffff", "#ffd28a"];
+  const parts = Array.from({ length: 110 }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .28,
+    vx: (Math.random() - .5) * 9, vy: -(Math.random() * 9 + 4),
+    s: Math.random() * 7 + 4, r: Math.random() * Math.PI, vr: (Math.random() - .5) * .3,
+    c: colors[Math.random() * colors.length | 0],
+  }));
+  const t0 = performance.now();
+  (function tick(now) {
+    const t = (now - t0) / 1000;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (const p of parts) {
+      p.x += p.vx; p.y += p.vy; p.vy += .28; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.globalAlpha = Math.max(1 - t / 1.6, 0);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .62); ctx.restore();
+    }
+    if (t < 1.6) requestAnimationFrame(tick);
+    else { ctx.clearRect(0, 0, innerWidth, innerHeight); cv.width = cv.height = 0; }
+  })(t0);
 }
 
 /* ---------- review ---------- */
-function showReview(o, idx) {
+function renderReview(o, idx) {
   const a = o.answers[idx], q = a.q, good = a.picked === q.correctAnswer;
-  frame("Review", "Results", () => showResults(o), `
-    <div class="qmeta" style="text-align:center">Question ${idx + 1} of ${o.answers.length}</div>
-    <div class="fadeq">
-      <div class="verdict" style="color:${good ? "var(--green)" : "var(--red)"}">
-        ${good ? "&#10003; Correct" : "&#10005; Incorrect"}<span class="diff">${esc(q.difficulty)}</span></div>
-      <div class="qtext" style="font-size:17px">${esc(q.text)}</div>
-      ${q.options.map((op, k) => {
-        const cls = k === q.correctAnswer ? "ropt good" : k === a.picked ? "ropt bad" : "ropt";
-        const mk = k === q.correctAnswer ? "&#10003;" : (k === a.picked ? "&#10005;" : "");
-        return `<div class="${cls}">${k === a.picked ? '<span class="you">YOUR ANSWER</span>' : ""}<span>${esc(op)}</span><span>${mk}</span></div>`;
-      }).join("")}
-      <div class="explain card show"><div class="tag">&#128161; Explanation</div><div class="body">${esc(q.explanation)}</div></div>
-    </div>`,
+  frame({ title: `Review · ${idx + 1}/${o.answers.length}`, backLabel: "Results" }, `
+    <div class="verdict" style="color:${good ? "var(--green)" : "var(--red)"}">
+      ${good ? "✓ Correct" : "✕ Incorrect"}<span class="diff">${esc(q.difficulty)}</span></div>
+    <div class="qtext" style="font-size:17px">${esc(q.text)}</div>
+    ${q.options.map((op, k) => {
+      const cls = k === q.correctAnswer ? "ropt good" : k === a.picked ? "ropt bad" : "ropt";
+      const mk = k === q.correctAnswer ? "✓" : (k === a.picked ? "✕" : "");
+      return `<div class="${cls}">${k === a.picked ? '<span class="you">YOUR ANSWER</span>' : ""}<span>${esc(op)}</span><span style="font-weight:800">${mk}</span></div>`;
+    }).join("")}
+    <div class="explain card show" style="margin-top:14px"><div class="tag">💡 Explanation</div><div class="body">${esc(q.explanation)}</div></div>`,
     `<div class="rev-nav">
-      <button class="prev" id="pv" ${idx === 0 ? "disabled" : ""}>&#8249; Previous</button>
-      <button class="next" id="nx" ${idx === o.answers.length - 1 ? "disabled" : ""}>Next &#8250;</button>
+      <button class="btn ghost" id="pv" ${idx === 0 ? "disabled style='opacity:.4'" : ""}>‹ Previous</button>
+      <button class="btn" id="nx" ${idx === o.answers.length - 1 ? "disabled style='opacity:.4'" : ""}>Next ›</button>
     </div>`);
-  document.getElementById("pv").onclick = () => idx > 0 && showReview(o, idx - 1);
-  document.getElementById("nx").onclick = () => idx < o.answers.length - 1 && showReview(o, idx + 1);
+  document.getElementById("pv").onclick = () => { if (idx > 0) { hTap(); renderReview(o, idx - 1); } };
+  document.getElementById("nx").onclick = () => { if (idx < o.answers.length - 1) { hTap(); renderReview(o, idx + 1); } };
 }
 
-/* ---------- theme (works on any host: artifact, GitHub Pages, standalone file) ---------- */
+/* ---------- stats / progress ---------- */
+function renderStats() {
+  const st = stats();
+  frame({ title: "My Progress", backLabel: "Home", right: themeBtnHTML() }, `
+    <div class="card" style="display:flex;gap:0;text-align:center;padding:18px 0;margin-top:8px">
+      <div style="flex:1"><div style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums">${st.correct}</div><div class="hint">Correct</div></div>
+      <div style="flex:1;border-left:1px solid var(--line);border-right:1px solid var(--line)"><div style="font-size:22px;font-weight:800">${Math.round(st.accuracy * 100)}%</div><div class="hint">Accuracy</div></div>
+      <div style="flex:1"><div style="font-size:22px;font-weight:800">🔥 ${st.streak}</div><div class="hint">Streak</div></div>
+    </div>
+    <div class="sect">Category mastery</div>
+    <div class="card statbars">${BANK.categories.map(c => {
+      const m = categoryMastery(c);
+      return `<div class="sb">
+        <div class="top"><span>${CAT_EMOJI[c] || "☁️"} ${esc(c)}</span><span class="pc">${m.right}/${m.total}</span></div>
+        <div class="bar"><i data-w="${Math.round(m.pct * 100)}"></i></div>
+      </div>`;
+    }).join("")}</div>
+    <p class="hint" style="margin-top:16px">Mastered = answered correctly on your most recent attempt.<br>Missing a question sends it back to Practice Mode.</p>`);
+  wireTheme();
+  setTimeout(() => document.querySelectorAll(".sb .bar i").forEach(i => { i.style.width = i.dataset.w + "%"; }), 60);
+}
+
+/* ---------- theme ---------- */
 const THEME_KEY = "aqm.theme";
 function effectiveTheme() {
   const set = document.documentElement.getAttribute("data-theme");
   if (set === "dark" || set === "light") return set;
-  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 function applyTheme(t) {
   document.documentElement.setAttribute("data-theme", t);
-  const btn = document.getElementById("themeToggle");
-  if (btn) {
-    btn.textContent = t === "dark" ? "☀️" : "🌙";
-    btn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
-  }
+  const b = document.getElementById("themeToggle");
+  if (b) b.textContent = t === "dark" ? "☀️" : "🌙";
+  const mt = document.querySelector(`meta[name="theme-color"]:not([media])`) || (() => {
+    const m = document.createElement("meta"); m.name = "theme-color"; document.head.appendChild(m); return m;
+  })();
+  mt.content = t === "dark" ? "#0b1017" : "#f4f5f7";
 }
-function initTheme() {
+function toggleTheme() {
+  const next = effectiveTheme() === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, next); applyTheme(next);
+}
+(function initTheme() {
   const saved = localStorage.getItem(THEME_KEY);
-  applyTheme(saved === "dark" || saved === "light" ? saved : effectiveTheme());
-  document.getElementById("themeToggle").onclick = () => {
-    const next = effectiveTheme() === "dark" ? "light" : "dark";
-    localStorage.setItem(THEME_KEY, next);
-    applyTheme(next);
-  };
+  if (saved === "dark" || saved === "light") applyTheme(saved);
+  else applyTheme(effectiveTheme());
+})();
+
+/* ---------- service worker (offline) ---------- */
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
 }
 
-initTheme();
-showHome();
+/* ---------- boot ---------- */
+history.replaceState({ screen: "home" }, "");
+renderHome();
 </script>
-
 </body>
 </html>
+
