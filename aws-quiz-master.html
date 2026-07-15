@@ -328,8 +328,27 @@ const scoreColor = r => r >= .7 ? "var(--green)" : r >= .4 ? "var(--orange)" : "
 const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* haptics: Android web vibrates; iOS Safari ignores (no-op) */
-const buzz = p => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+/* haptics:
+   - Android: Vibration API (patterns supported)
+   - iOS 17.4+: hidden native switch control — toggling it fires the system
+     haptic tick. Only works synchronously inside a user gesture, which is
+     where all our calls happen. Single fixed tick (Apple allows no more). */
+const canVibrate = typeof navigator.vibrate === "function";
+const iosHaptic = !canVibrate && "switch" in document.createElement("input");
+let hapticEl = null;
+if (iosHaptic) {
+  hapticEl = document.createElement("input");
+  hapticEl.type = "checkbox";
+  hapticEl.setAttribute("switch", "");
+  hapticEl.tabIndex = -1;
+  hapticEl.setAttribute("aria-hidden", "true");
+  hapticEl.style.cssText = "position:fixed;left:-100px;top:-100px;width:1px;height:1px;opacity:0;pointer-events:none";
+  document.body.appendChild(hapticEl);
+}
+const buzz = p => {
+  if (canVibrate) { try { navigator.vibrate(p); } catch {} }
+  else if (hapticEl) { try { hapticEl.click(); } catch {} }
+};
 const hTap = () => buzz(10), hGood = () => buzz([12, 40, 24]), hBad = () => buzz([50, 40, 50]), hTick = () => buzz(6);
 
 /* ---------- tiny router (Android back button + swipe-back friendly) ---------- */

@@ -1,5 +1,5 @@
 /* AWS Quiz Master — offline-first service worker */
-const CACHE = "aqm-v1";
+const CACHE = "aqm-v2";
 const ASSETS = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -32,3 +32,4 @@ self.addEventListener("fetch", e => {
     );
   }
 });
+
